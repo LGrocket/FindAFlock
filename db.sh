@@ -5,15 +5,24 @@ DEBIAN_FRONTEND=noninteractive
 export DEBIAN_FRONTEND
 
 # Get software list and update
-apt-get update -y
-apt-get dist-upgrade -y
+echo "Updating..."
+apt-get update -y  > dev/null
+apt-get dist-upgrade -y  > dev/null 2>&1
+echo "...Done"
 
-# Reinstall virtualbox guest additions (needed if kernel update occured)
-apt-get install -y make	linux-headers-$(uname -r)			# Required for vbox setup
-/etc/init.d/vboxadd setup
 
 # Install required software
-apt-get install -y mongodb
+echo "Installing Mongo"
+apt-get install -y mongodb  > dev/null 2>&1
+echo "...Done"
 
 # Install utility software
-apt-get install -y vim screen
+echo "Installing utility software..."
+apt-get install -y vim screen  > dev/null 2>&1
+echo "...Done"
+
+# Reinstall virtualbox guest additions (needed if kernel update occured)
+echo "Installing VirtualBox Guest Additions..."
+apt-get install -y make	linux-headers-$(uname -r) > dev/null 2>&1	# Required for vbox setup
+/etc/init.d/vboxadd setup
+echo "...Done"
