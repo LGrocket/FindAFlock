@@ -3,10 +3,19 @@
   "version": "0.0.0",
   "description": "Data layer for FindAFlock",
   "contributors": [ "Alexander Brigham <abrigham@umass.edu>" ],
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
   "dependencies": {
     "connect": "2.14.x",
     "mongojs": "0.11.x",
-    "express": "3.5.x"
-  },
-  "private": true
+    "express": "~3.4.8",
+    "static-favicon": "~1.0.0",
+    "morgan": "~1.0.0",
+    "cookie-parser": "~1.0.1",
+    "body-parser": "~1.0.0",
+    "debug": "~0.7.4",
+    "ejs": "~0.8.5"
+  }
 }
