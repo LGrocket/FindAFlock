@@ -57,3 +57,6 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
+
+
+console.log("Access the server at http://localhost:3000");
