@@ -1,6 +1,6 @@
 //from http://howtonode.org/node-js-and-mongodb-getting-started-with-mongojs
 
-var databaseUrl =  "abrigham@127.0.0.1/test"
+var databaseUrl =  "vagrant@127.0.0.1/test"
 var collections = ["users","flocks","flights"]
 
 var db = require('mongojs').connect(databaseUrl, collections);
