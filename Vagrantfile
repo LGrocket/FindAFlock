@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
     config.vm.define "web" do |web|
         web.vm.hostname = "web"
         web.vm.box = "precise32"
-        web.vm.network :forwarded_port, guest: 8080, host: 8080
+        web.vm.network :forwarded_port, guest: 3000, host: 8080
         web.vm.provision :shell, :path => "scripts/web.sh"
     end
 end
