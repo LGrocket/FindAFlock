@@ -11,9 +11,15 @@ echo "...Done"
 
 
 # Install required software
-echo "Installing Mongo"
-apt-get install -y mongodb  > /dev/null 2>&1
+echo "Installing Mongo..."
+apt-get install -y mongodb > /dev/null 2>&1
 echo "...Done"
+
+# Load the mock data
+echo "Loading mock data..."
+sleep 10s
+mongo /vagrant/scripts/mongo_mock_data.sh > /dev/null
+echo "...done"
 
 # Install utility software
 echo "Installing utility software..."
