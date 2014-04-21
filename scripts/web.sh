@@ -30,6 +30,7 @@ echo "Done"
 # Install utility software
 echo "Installing utility software..."
 apt-get install -y vim screen  > /dev/null
+echo "cd /vagrant/" >> /home/vagrant/.bashrc
 echo "Done"
 
 # Reinstall virtualbox guest additions (needed if kernel update occured)
