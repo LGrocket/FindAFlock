@@ -10,3 +10,14 @@ function activityIcon(activityType) {
 			return "fa fa-users";
 	}
 }
+
+function serializeFlight(flightID) {
+	return {
+		flightID : flight,
+		activityType: getFlightActivityType(flightID),
+		time: getFlightTime(flightID),
+		location: getFlightLocation(flightID),
+		members: getFlightMembers(flightID),
+		dateOfCreation: getFlightDoC(flightID)
+	};
+}
