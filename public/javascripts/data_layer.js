@@ -5,20 +5,6 @@ var collections = ["users"]
 
 var db = require('mongojs').connect(databaseUrl, collections);
 
-//FIXME: Legacy
-exports.getUser = function(facebookID, callback) {
-	db.users.findOne(   {"facebookID": facebookID}, 
-						function(err,docs)
-							{ 
-								if (err) { 
-									callback(err);
-								} else {
-									callback(null,docs);
-								}
-							}
-	);
-}
-
 //	*****************
 //	*      Users	*
 //	*****************
@@ -56,6 +42,18 @@ exports.createFlight = function(cb){
 exports.addUserToFlight = function(flightID, userID, cb){
 	//TODO: Implement
 	cb(null, true);
+}
+exports.setFlightActivityType = function( activityType, cb){
+	//TODO: Implement
+	cb(null, true);
+}
+exports.setFlightTime = function(flightID, startTime, cb){
+	//TODO: Implement
+	cb(null,true);
+}
+exports.setFlightLocation = function(flightID, startTime, cb){
+	//TODO: Implement
+	cb(null,true);
 }
 exports.getLocalFlights = function(location, distance, cb){
 	//TODO: Implement
