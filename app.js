@@ -6,15 +6,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
-var dal = require('private/data_layer.js');
+var routes = require('./routes');
+//var dal = require('../private/data_layer.js');
 
 var app = express();
 
-var routes = require('./routes')(app, passport);
-
-
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 
 app.use(favicon());
@@ -30,16 +28,13 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(app.router);
 
-//function isLoggedIn(req, res, next) {
-	//// if user is authenticated in the session, carry on 
-	//if (req.isAuthenticated())
-		//return next();
-	//// if they aren't redirect them to the home page
-	//res.redirect('/');
-//}
 //Controller and routes
-app.get('/', routes.index);
-apt.get('/ping', routes.ping);
+//app.get('/', routes.index);
+//app.get('/ping', routes.ping);
+app.get('/logout', function(req, res){
+	req.logout();
+	res.redirect('/');
+});
 app.get('/account', ensureAuthenticated, function(req, res) {
 	addUser(req.session.passport.user, null, function(err, user) {
 		if(err) {
@@ -52,19 +47,15 @@ app.get('/account', ensureAuthenticated, function(req, res) {
 app.get('/auth/facebook',
 	passport.authenticate('facebook'),
 	function(req, res){
-	});
+});
 app.get('/auth/facebook/callback',
 	passport.authenticate('facebook', { failureRedirect: '' }),
 	function(req, res) {
 		res.redirect('/account');
 });
-app.get('/profile', routes.user);
-app.get('/newflight', routes.newflight);
-app.get('/flight/*', routes.flight);
-app.get('/logout', function(req, res){
-	req.logout();
-	res.redirect('/');
-});
+//app.get('/profile', routes.user);
+//app.get('/newflight', routes.newflight);
+//app.get('/flight/*', routes.flight);
 
 //test authentication
 function ensureAuthenticated(req, res, next) {
@@ -84,12 +75,12 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
+	 app.use(function(err, req, res, next) {
+		  res.render('error', {
+				message: err.message,
+				error: err
+		  });
+	 });
 }
 
 // production error handler
