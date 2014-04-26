@@ -92,9 +92,9 @@ app.use(function(err, req, res, next) {
     });
 });
 
+app.listen(3000);
 
 module.exports = app;
-
 
 console.log("Server running on localhost:3000");
 console.log("If using vagrant, on your normal browser go to http://localhost:8080");
