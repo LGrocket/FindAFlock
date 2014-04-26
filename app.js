@@ -5,9 +5,10 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+//var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
+var dal = require('data_layer.js')(app, __dirname);
 
 var routes = require('./routes');
-var users = require('./routes/user');
 
 var app = express();
 
@@ -21,10 +22,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.session({ secret: 'secret code' }));
+//app.use(passport.initialize());
+//app.use(passport.session());
 app.use(app.router);
 
+//Controller and routes
 app.get('/', routes.index);
-app.get('/users', users.list);
+app.get('/profile', routes.user);
+app.get('/newflight', routes.newflight);
+app.get('/fight/*', routes.flight);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
