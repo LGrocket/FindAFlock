@@ -21,3 +21,8 @@ function serializeFlight(flightID) {
 		dateOfCreation: getFlightDoC(flightID)
 	};
 }
+
+//Get location stub
+function getLocation() {
+	return "Amerhst";
+}

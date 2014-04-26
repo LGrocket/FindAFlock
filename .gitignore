@@ -1,3 +1,6 @@
+#Sensitive data
+private/config/auth.js
+
 #------Node.js------
 logs
 *.log

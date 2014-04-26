@@ -6,9 +6,13 @@ exports.index = function(req, res){
 	  localFlights.push(serializeFlight(flightID));
   });
   //TODO: crafted mongodb query for flights of friends? returns flightID
-  res.render('index', {
-		localFlights: localFlights,
-		friendFlights: { 
-		}
-  });
+  //if not logged in:
+  //res.render('login');
+  //else {
+	  res.render('index', {
+			localFlights: localFlights,
+			friendFlights: { 
+			}
+	  });
+  //}
 };

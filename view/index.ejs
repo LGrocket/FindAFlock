@@ -1,5 +1,14 @@
         <!-- Add your site or application content here -->
-        <h2>Friend's Flights<h2>
+		  <h1>Auth</h1>
+
+		  <div class="auth">		  
+			  <h1>You are logged in.</h1>
+			  <a href="/">Go home</a><br>
+			  <a href="/ping">Ping</a><br>
+			  <a href="/logout">Logout</a>
+		  </div>
+<% if(false) { %>
+		  <h2>Friend's Flights<h2>
 				  <ul>
 				  <% var fflights = {}; %>
 				  <% user.facebook.friendList.forEach(function (friend) { %>
@@ -52,3 +61,5 @@
 			  <li class="new-flight drinks"><i class="fa fa-glass"></i><button class="new-flight drinks submit">Drinks</button></li>
 			  <li class="new-flight anything"><i class="fa fa-users"></i><button class="new-flight anything submit">Anything</button></li>
 		  </ul>
+
+<% } %>

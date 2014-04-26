@@ -1,4 +1,6 @@
 /* GET profile page and settings page */
-exports.index = function(req, res){
-  res.render('profile');
-};
+if (isloggedin(req, res)) {
+	exports.profile = function(req, res){
+	  res.render('profile', { user: req.user });
+	};
+}

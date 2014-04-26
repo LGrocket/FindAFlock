@@ -3,7 +3,11 @@
 var databaseUrl =  "vagrant@10.0.2.2/test"
 var collections = ["users", "flights"]
 
-var db = require('mongojs').connect(databaseUrl, collections);
+module.exports = {
+	var db = require('mongojs').connect(databaseUrl, collections);
+}
+
+//require('passport')(passport);
 
 //    *****************
 //    *      Users    *
