@@ -5,9 +5,34 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var config = require('./oauth.js');
+var passport = require('passport');
+var FacebookStrategy = require('passport-facebook').Strategy;
 
 var routes = require('./routes');
-var users = require('./routes/user');
+
+//Facebook auth from:
+//http://mherman.org/blog/2013/11/10/social-authentication-with-passport-dot-js/#.U1wKguZdViY
+// serialize and deserialize
+passport.serializeUser(function(user, done) {
+	done(null, user);
+});
+passport.deserializeUser(function(obj, done) {
+	done(null, obj);
+});
+
+// config
+passport.use(new FacebookStrategy({
+ clientID: config.facebook.clientID,
+ clientSecret: config.facebook.clientSecret,
+ callbackURL: config.facebook.callbackURL
+},
+function(accessToken, refreshToken, profile, done) {
+ process.nextTick(function () {
+   return done(null, profile);
+ });
+}
+));
 
 var app = express();
 
@@ -20,11 +45,37 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.methodOverride());
+app.use(express.session({ secret: 'my_precious' }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(app.router);
+app.use(express.static(path.join(__dirname, 'public')));
 
+// routes
 app.get('/', routes.index);
-app.get('/users', users.list);
+//app.get('/ping', routes.ping);
+app.get('/account', ensureAuthenticated, function(req, res){
+res.render('account');
+});
+
+//app.get('/', function(req, res){
+//res.render('login', { user: req.user });
+//});
+
+app.get('/auth/facebook',
+	passport.authenticate('facebook'),
+	function(req, res){
+});
+app.get('/auth/facebook/callback',
+passport.authenticate('facebook', { failureRedirect: '/' }),
+function(req, res) {
+ res.redirect('/account');
+});
+app.get('/logout', function(req, res){
+req.logout();
+res.redirect('/');
+});
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
@@ -55,5 +106,10 @@ app.use(function(err, req, res, next) {
     });
 });
 
+// test authentication
+function ensureAuthenticated(req, res, next) {
+if (req.isAuthenticated()) { return next(); }
+res.redirect('/');
+}
 
 module.exports = app;
