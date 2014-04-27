@@ -6,7 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 //var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
-var dal = require('data_layer.js')(app, __dirname);
+var dal = require('./public/../private/data_layer.js');
 
 var routes = require('./routes');
 
@@ -29,9 +29,9 @@ app.use(app.router);
 
 //Controller and routes
 app.get('/', routes.index);
-app.get('/profile', routes.user);
-app.get('/newflight', routes.newflight);
-app.get('/fight/*', routes.flight);
+//app.get('/profile', routes.user);
+//app.get('/newflight', routes.newflight);
+//app.get('/fight/*', routes.flight);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
