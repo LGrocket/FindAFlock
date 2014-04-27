@@ -12,7 +12,7 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var controller = require('./private/LRGgeneral.js');
 var dal = require('./private/data_layer.js');
 
-var routes = require('./routes');
+//var routes = require('./routes');
 
 //Facebook auth from:
 //http://mherman.org/blog/2013/11/10/social-authentication-with-passport-dot-js/#.U1wKguZdViY
@@ -60,7 +60,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //var fbGraph = request.newClient('https://graph.facebook.com/');
 app.get('/', function(req, res){
 	  if(req.isAuthenticated())
-		  res.render('dashboard', { title: 'Dashboard' });
+		  res.redirect('dashboard');
 	  else 
 		  res.render('index', { title: 'FindAFlock' });
 	}
@@ -80,8 +80,8 @@ app.get('/dashboard', ensureAuthenticated, function(req, res){
 	  //lFlights.push ( controller.deserializeFlight(FlightID) );
   //});
 
-  //res.render('dashboard', { fFlights: fFlights, lFlights: lFlights } );
-  res.render('dashboard', {title: "Dashboard" });
+  res.render('dashboard', { title: "Dashboard", fFlights: controller.fakeFlights(), lFlights: controller.fakeFlights() } );
+  //res.render('dashboard', {title: "Dashboard" });
 });
 app.get('/account', ensureAuthenticated, function(req, res){
 	res.render('account', { user: req.user });
