@@ -11,6 +11,8 @@ var db = require('mongojs').connect(databaseUrl, collections);
 // Users: [{userID, current_location:[lat, long], current_flight:flightID}]
 exports.test = function() { console.log("Testing form the dal"); };
 
+exports.getFriendsFlights = function() { return [0, 1, 2]; };
+
 exports.addUser = function(userID, location, cb){
     db.users.update( {"userID": userID}
             ,{"userID": userID, "location": location}

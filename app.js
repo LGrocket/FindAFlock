@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var config = require('./oauth.js');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
+var controller = require('./private/LRGgeneral.js');
 var dal = require('./private/data_layer.js');
 
 var routes = require('./routes');
@@ -29,21 +30,19 @@ passport.use(new FacebookStrategy({
 	profileFields: ['id', 'name', 'photos', 'location', 'friends']
 },
 	function(accessToken, refreshToken, profile, done) {
-	  dal.addUser(profile.id, getLocation(), function(err) {
+	  console.log("yup");
+	  dal.addUser(profile.id, controller.getLocation(), function(err) {
 		  console.log(err);
 	  });
 	  return done(null, profile);
 }));
 
-//TODO: Stub method, implement GPS
-function getLocation() {
-	return "Amherst";
-}
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.set('view options', { layout: 'layout.ejs' });
 
 app.use(favicon());
 app.use(logger('dev'));
@@ -59,6 +58,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 app.get('/', routes.index);
+app.get('/dashboard', ensureAuthenticated, function(req, res){
+  var fFlights = [];
+  console.dir(fFlights);
+  var fFlightsID = dal.getFriendsFlights(req.user.friends);
+  fFlightsID.forEach(function(flightID) {
+	  fFlights.push( controller.deserializeFlight(flightID) );
+  });
+
+  res.render('dashboard', { fFlights: fFlights } );
+});
 app.get('/account', ensureAuthenticated, function(req, res){
 	res.render('account', { user: req.user });
 });
@@ -75,7 +84,7 @@ function(req, res){
 app.get('/auth/facebook/callback',
 passport.authenticate('facebook', { failureRedirect: '/' }),
 function(req, res) {
- res.redirect('/account');
+ res.redirect('/dashboard');
 });
 app.get('/logout', function(req, res){
 req.logout();
