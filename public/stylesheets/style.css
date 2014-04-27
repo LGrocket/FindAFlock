@@ -31,3 +31,11 @@ ul.flight-member li {
 ul.flight-member {
 	padding: 0;
 }
+tr.flight a {
+	text-decoration: none;
+	color: inherit;
+}
+tr.flight a:hover {
+	text-decoration: none;
+	color: #93D0F9;
+}

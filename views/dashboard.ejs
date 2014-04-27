@@ -38,9 +38,11 @@
 					<tbody>
 					<% fFlights.forEach(function(flight) { %>
 						<tr class="flight flight-<%= flight.id %>">
-							<td class="flight-location"><%= flight.location %></td>
-							<td class="flight-time"><%= flight.time %></td>
-							<td class="flight-members"><%= flight.members.length %></td>
+							<td class="flight-location"><a href="/flight/<%= flight.id %>"><%= flight.location %></a></td>
+							<td class="flight-time"><a href="/flight/<%= flight.id %>"><%= flight.time %></a></td>
+						</a>
+						<td class="flight-members"><a href="/flight/<%= flight.id %>"><%= flight.members.length %></a></td>
+						</a>
 						</tr>
 					<% }); %>
 					</tbody>
