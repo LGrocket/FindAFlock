@@ -106,6 +106,19 @@ app.get('/leave', ensureAuthenticated, function(req, res) {
 	//dal.removeUserFromFlight(req.user.id, dal.getUserCurrentFlight(req.user.id));
 	res.redirect('/dashboard');
 });
+app.get('/newflight/:type', ensureAuthenticated, function(req, res) {
+	var icon = controller.activityIcon(req.route.params.type);
+	res.render('newflight', { title: "New Flight", user: req.user, type: req.route.params.type, icon: icon });
+});
+app.post('/addFlight', function(req, res) {
+	//TODO: data isn't saved!
+	var flightID = dal.createFlight();
+	dal.addUserToFlight(req.user.id, flightID);
+	dal.setFlightActivityType(flightID, req.body.type);
+	dal.setFlightTime(flightID, req.body.time);
+	dal.setFlightLocation(flightID, req.body.location);
+	res.redirect('/dashboard');
+});
 app.get('/account', ensureAuthenticated, function(req, res){
 	res.render('account', { user: req.user });
 });
