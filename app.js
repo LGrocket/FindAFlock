@@ -79,8 +79,14 @@ app.get('/dashboard', ensureAuthenticated, function(req, res){
 	  //lFlights.push ( controller.deserializeFlight(FlightID) );
   //});
 
-  res.render('dashboard', { title: "Dashboard", fFlights: controller.fakeFlights(), lFlights: controller.fakeFlights() } );
-  //res.render('dashboard', {title: "Dashboard" });
+  //TODO: fakeFlights
+  res.render('dashboard', { title: "Dashboard", fFlights: controller.fakeFlights(), lFlights: controller.fakeFlights(), user: req.user } );
+});
+app.get('/flight/:id', ensureAuthenticated, function(req, res) {
+  //TODO: fakeFlights
+	//var flight = controller.serializeFlight(req.route.params.id);
+	var fakeFlight = controller.fakeFlights()[0];
+	res.render('flightinfo', { title: "Flight Info", user: req.user, flight: fakeFlight});
 });
 app.get('/account', ensureAuthenticated, function(req, res){
 	res.render('account', { user: req.user });

@@ -1,0 +1,45 @@
+<% include header %>
+<div id="layout">
+
+ <!-- Menu toggle -->
+ <a href="#menu" id="menuLink" class="menu-link">
+	  <!-- Hamburger icon -->
+	  <span></span>
+ </a>
+
+ <div id="menu">
+	  <div class="pure-menu pure-menu-open">
+		  <a "pure-menu-heading" href="/">FindAFlock</a>
+			<ul>
+				 <li><a href="/">Home</a></li>
+				 <li><a href="/profile">Profile</a></li>
+				 <li><a href="/logout">Logout</a></li>
+				 </li>
+			</ul>
+	  </div>
+ </div>
+    <div id="main">
+        <div class="header">
+            <h1>Flight Info</h1>
+        </div>
+
+        <div class="content">
+			  <div class="flight-info">
+			  <h2>This flight is grabbing</h2>
+			  <h3><i class="<%= flight.activityIcon %>"></i><%= flight.activityType %></h3>
+			  <h4>at</h4>
+			  <h3><%= flight.location %></h3>
+		  </div>
+				<div class="soar">
+				<a class="soar pure-button pure-button-primary" href="/join/<%= flight.id %>">Soar</a>
+			</div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script src="/javascripts/ui.js"></script>
+<% include footer %>

@@ -14,7 +14,7 @@ exports.activityIcon = function(activityType) {
 
 exports.deserializeFlight = function (flightID) {
 	return {
-		flightID : flightID,
+		id: flightID,
 		activityType: dal.getFlightActivityType(flightID),
 		time: dal.getFlightTime(flightID),
 		location: dal.getFlightLocation(flightID),
@@ -30,23 +30,26 @@ exports.getLocation = function () {
 
 exports.fakeFlights = function() {
 	return [{
-		flightID : 0,
+		id: 0,
 		activityType: "Drinks",
+		activityIcon: "fa fa-glass",
 		time: "10:34am",
 		location: "High Horse",
 		members: [0, 2, 4],
 		dateOfCreation: "10:00am"
 	},
 	{
-		flightID : 1,
+		id: 1,
 		activityType: "Food",
+		activityIcon: "fa fa-cutlery",
 		time: "2:45am",
 		location: "Amherst",
 		members: [1, 3],
 		dateOfCreation: "10:00am"
 	},{
-		flightID : 2,
+		id: 2,
 		activityType: "Anything",
+		activityIcon: "fa fa-user",
 		time: "12:00pm",
 		location: "Student Union",
 		members: [2],
