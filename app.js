@@ -21,16 +21,15 @@ passport.deserializeUser(function(obj, done) {
 	done(null, obj);
 });
 
-// config
 passport.use(new FacebookStrategy({
- clientID: config.facebook.clientID,
- clientSecret: config.facebook.clientSecret,
- callbackURL: config.facebook.callbackURL
+clientID: config.facebook.clientID,
+clientSecret: config.facebook.clientSecret,
+callbackURL: config.facebook.callbackURL
 },
 function(accessToken, refreshToken, profile, done) {
- process.nextTick(function () {
-   return done(null, profile);
- });
+process.nextTick(function () {
+  return done(null, profile);
+});
 }
 ));
 
@@ -54,18 +53,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 app.get('/', routes.index);
-//app.get('/ping', routes.ping);
+app.get('/ping', function(req, res) {
+	res.render('index', {title: "Ping"});
+});
 app.get('/account', ensureAuthenticated, function(req, res){
-res.render('account');
+res.render('account', { user: req.user });
 });
 
-//app.get('/', function(req, res){
-//res.render('login', { user: req.user });
-//});
+app.get('/', function(req, res){
+res.render('login', { user: req.user });
+});
 
 app.get('/auth/facebook',
-	passport.authenticate('facebook'),
-	function(req, res){
+passport.authenticate('facebook'),
+function(req, res){
 });
 app.get('/auth/facebook/callback',
 passport.authenticate('facebook', { failureRedirect: '/' }),
@@ -108,8 +109,8 @@ app.use(function(err, req, res, next) {
 
 // test authentication
 function ensureAuthenticated(req, res, next) {
-if (req.isAuthenticated()) { return next(); }
-res.redirect('/');
+	if (req.isAuthenticated()) { return next(); }
+	res.redirect('/');
 }
 
 module.exports = app;
