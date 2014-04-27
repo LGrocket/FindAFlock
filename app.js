@@ -57,14 +57,14 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
-var fbGraph = request.newClient('https://graph.facebook.com/');
+//var fbGraph = request.newClient('https://graph.facebook.com/');
 app.get('/', routes.index);
 app.get('/dashboard', ensureAuthenticated, function(req, res){
-  var fFlights = [];
-  var fFlightsID = dal.getFriendsFlights(req.user.friends);
-  fFlightsID.forEach(function(flightID) {
-	  fFlights.push( controller.deserializeFlight(flightID) );
-  });
+  //var fFlights = [];
+  //var fFlightsID = dal.getFriendsFlights(req.user.friends);
+  //fFlightsID.forEach(function(flightID) {
+	  //fFlights.push( controller.deserializeFlight(flightID) );
+  //});
 	//TODO: get location and find local flights
 	//fbGraph.get(req.user._json.location.id);
 		//var loc = [data.location.latitude, data.location.longitude];
@@ -75,7 +75,7 @@ app.get('/dashboard', ensureAuthenticated, function(req, res){
   //});
 
   //res.render('dashboard', { fFlights: fFlights, lFlights: lFlights } );
-  res.render('dashboard', { fFlights: fFlights } );
+  res.render('dashboard', {title: "Dashboard" });
 });
 app.get('/account', ensureAuthenticated, function(req, res){
 	res.render('account', { user: req.user });
