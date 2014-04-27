@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var config = require('./oauth.js');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
+var dal = require('./private/data_layer.js');
 
 var routes = require('./routes');
 
@@ -22,17 +23,22 @@ passport.deserializeUser(function(obj, done) {
 });
 
 passport.use(new FacebookStrategy({
-clientID: config.facebook.clientID,
-clientSecret: config.facebook.clientSecret,
-callbackURL: config.facebook.callbackURL
+	clientID: config.facebook.clientID,
+	clientSecret: config.facebook.clientSecret,
+	callbackURL: config.facebook.callbackURL,
+	profileFields: ['id', 'name', 'photos', 'location', 'friends']
 },
-function(accessToken, refreshToken, profile, done) {
-process.nextTick(function () {
-  return done(null, profile);
-});
-}
-));
+	function(accessToken, refreshToken, profile, done) {
+	  dal.addUser(profile.id, getLocation(), function(err) {
+		  console.log(err);
+	  });
+	  return done(null, profile);
+}));
 
+//TODO: Stub method, implement GPS
+function getLocation() {
+	return "Amherst";
+}
 var app = express();
 
 // view engine setup
@@ -53,11 +59,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 app.get('/', routes.index);
-app.get('/ping', function(req, res) {
-	res.render('index', {title: "Ping"});
-});
 app.get('/account', ensureAuthenticated, function(req, res){
-res.render('account', { user: req.user });
+	res.render('account', { user: req.user });
 });
 
 app.get('/', function(req, res){
@@ -68,6 +71,7 @@ app.get('/auth/facebook',
 passport.authenticate('facebook'),
 function(req, res){
 });
+
 app.get('/auth/facebook/callback',
 passport.authenticate('facebook', { failureRedirect: '/' }),
 function(req, res) {
