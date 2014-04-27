@@ -6,6 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var config = require('./oauth.js');
+var request = require('request-json');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var controller = require('./private/LRGgeneral.js');
@@ -30,7 +31,6 @@ passport.use(new FacebookStrategy({
 	profileFields: ['id', 'name', 'photos', 'location', 'friends']
 },
 	function(accessToken, refreshToken, profile, done) {
-	  console.log("yup");
 	  dal.addUser(profile.id, controller.getLocation(), function(err) {
 		  console.log(err);
 	  });
@@ -57,15 +57,24 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
+var fbGraph = request.newClient('https://graph.facebook.com/');
 app.get('/', routes.index);
 app.get('/dashboard', ensureAuthenticated, function(req, res){
   var fFlights = [];
-  console.dir(fFlights);
   var fFlightsID = dal.getFriendsFlights(req.user.friends);
   fFlightsID.forEach(function(flightID) {
 	  fFlights.push( controller.deserializeFlight(flightID) );
   });
+	//TODO: get location and find local flights
+	//fbGraph.get(req.user._json.location.id);
+		//var loc = [data.location.latitude, data.location.longitude];
+		//});
+  //var lFlights = [];
+  //getLocalFlights(loc, locationRadius).forEach( function(lFlightID) {
+	  //lFlights.push ( controller.deserializeFlight(FlightID) );
+  //});
 
+  //res.render('dashboard', { fFlights: fFlights, lFlights: lFlights } );
   res.render('dashboard', { fFlights: fFlights } );
 });
 app.get('/account', ensureAuthenticated, function(req, res){
