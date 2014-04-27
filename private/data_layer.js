@@ -1,9 +1,14 @@
 //from http://howtonode.org/node-js-and-mongodb-getting-started-with-mongojs
 
-var databaseUrl =  "vagrant@10.0.2.2/test";
+//var databaseUrl =  "vagrant@10.0.2.2/test";
 var collections = ["users", "flights"];
+//for heroku
+var databaseUrl = process.env.MONGOLAB_URI ||
+  process.env.MONGOHQ_URL ||
+    'vagrant@10.0.2.2/test';
 
 var db = require('mongojs').connect(databaseUrl, collections);
+
 
 //    *****************
 //    *      Users    *
