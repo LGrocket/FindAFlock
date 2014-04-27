@@ -80,14 +80,31 @@ app.get('/dashboard', ensureAuthenticated, function(req, res){
   //});
 
   //TODO: fakeFlights
-  res.render('dashboard', { title: "Dashboard", fFlights: controller.fakeFlights(), lFlights: controller.fakeFlights(), user: req.user } );
+	var userIsMember = false;
+  //if(dal.getUserCurrentFlight(req.user.id)) { userIsMember = true; }
+  res.render('dashboard', { title: "Dashboard", fFlights: controller.fakeFlights(), lFlights: controller.fakeFlights(), user: req.user, userIsMember: userIsMember } );
 });
 app.get('/flight/:id', ensureAuthenticated, function(req, res) {
   //TODO: fakeFlights
 	//var flight = controller.serializeFlight(req.route.params.id);
 	var fakeFlight = controller.fakeFlights()[0];
-	console.dir(fakeFlight);
-	res.render('flightinfo', { title: "Flight Info", user: req.user, flight: fakeFlight});
+	res.render('flightinfo', { title: "Flight Info", user: req.user, flight: fakeFlight, userIsMember: false });
+});
+app.get('/join/:id', ensureAuthenticated, function(req, res) {
+	dal.addUserToFlight(req.route.params.id, req.user.id);
+	var fakeFlight = controller.fakeFlights()[0];
+	//controller.deserializeFlight(req.route.params.id).members.forEach(function(member) {
+		//if (member.id === user.id) { var userIsMember = true; }
+	//});
+	//TODO: fake
+	userIsMember = true;
+	req.user.member = true;
+	res.render('flightinfo', { title: "Flight Info", user: req.user, flight: fakeFlight, userIsMember: true });
+});
+app.get('/leave', ensureAuthenticated, function(req, res) {
+	//TODO: fake
+	//dal.removeUserFromFlight(req.user.id, dal.getUserCurrentFlight(req.user.id));
+	res.redirect('/dashboard');
 });
 app.get('/account', ensureAuthenticated, function(req, res){
 	res.render('account', { user: req.user });
