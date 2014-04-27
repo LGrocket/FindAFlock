@@ -58,7 +58,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 //var fbGraph = request.newClient('https://graph.facebook.com/');
-app.get('/', routes.index);
+app.get('/', function(req, res){
+	  if(req.isAuthenticated())
+		  res.render('dashboard', { title: 'Dashboard' });
+	  else 
+		  res.render('index', { title: 'FindAFlock' });
+	}
+);
 app.get('/dashboard', ensureAuthenticated, function(req, res){
   //var fFlights = [];
   //var fFlightsID = dal.getFriendsFlights(req.user.friends);
@@ -79,10 +85,6 @@ app.get('/dashboard', ensureAuthenticated, function(req, res){
 });
 app.get('/account', ensureAuthenticated, function(req, res){
 	res.render('account', { user: req.user });
-});
-
-app.get('/', function(req, res){
-res.render('login', { user: req.user });
 });
 
 app.get('/auth/facebook',
