@@ -42,7 +42,6 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.set('view options', { layout: 'layout.ejs' });
 
 app.use(favicon());
 app.use(logger('dev'));
@@ -138,3 +137,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 module.exports = app;
+
+
+console.log("Server running on localhost:3000");
+console.log("If using vagrant, on your normal browser go to http://localhost:8080");
