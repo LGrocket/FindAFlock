@@ -1,8 +1,11 @@
-body {
-  padding: 50px;
+div#menu a {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  text-decoration: none;
+  }
+div#menu li {
+  list-style-type: none;
+  padding-top: 1em;
 }
-
-a {
-  color: #00B7FF;
+img#dash-logo {
+	margin-left: -.5em;
 }

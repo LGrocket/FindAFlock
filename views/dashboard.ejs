@@ -1,7 +1,27 @@
 <% include header %>
 <div id="layout">
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
+
+    <div id="menu">
+        <div class="pure-menu pure-menu-open">
+			  <p><a href="/">FindAFlock</a></p>
+
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/profile">Profile</a></li>
+					 <li><a href="/logout">Logout</a></li>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     <div id="main">
         <div class="header">
+			  <a href="/"><img id="dash-logo" src="images/FindAFlock-Futura-Light-fb.png"></a>
             <h1>Dashboard</h1>
             <h2>Checkout the flights you can join.</h2>
         </div>
