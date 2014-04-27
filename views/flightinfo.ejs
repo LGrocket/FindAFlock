@@ -25,7 +25,14 @@
 
         <div class="content">
 			  <div class="flight-info">
-			  <h2>This flight is grabbing</h2>
+				  <ul class="flight-member fb-profile">
+					  <% flight.members.forEach(function(member) { %>
+					  <li class="fb-profile">
+					  <img src="<%= member.photos[0].value %>" title="<%= member.name.givenName %>">
+					  </li>
+				  <% }); %>
+				  </ul>
+			  <h2>This flock is grabbing</h2>
 			  <h3><i class="<%= flight.activityIcon %>"></i><%= flight.activityType %></h3>
 			  <h4>at</h4>
 			  <h3><%= flight.location %></h3>
@@ -37,9 +44,6 @@
     </div>
 </div>
 
-
-
-
-
+<script> $(function() { $('li.fb-profile img').tipsy(); });</script>
 <script src="/javascripts/ui.js"></script>
 <% include footer %>

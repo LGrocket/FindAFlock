@@ -86,6 +86,7 @@ app.get('/flight/:id', ensureAuthenticated, function(req, res) {
   //TODO: fakeFlights
 	//var flight = controller.serializeFlight(req.route.params.id);
 	var fakeFlight = controller.fakeFlights()[0];
+	console.dir(fakeFlight);
 	res.render('flightinfo', { title: "Flight Info", user: req.user, flight: fakeFlight});
 });
 app.get('/account', ensureAuthenticated, function(req, res){

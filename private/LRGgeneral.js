@@ -35,7 +35,14 @@ exports.fakeFlights = function() {
 		activityIcon: "fa fa-glass",
 		time: "10:34am",
 		location: "High Horse",
-		members: [0, 2, 4],
+		members: [{
+			id: '1557156321', 
+			name:
+				{ familyName: 'Gutterman',
+				  givenName: 'Lucas',
+					 middleName: 'Rockett' },
+			photos: [ { value: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-frc1/t1.0-1/p50x50/1898055_10203278142625148_6400395_t.jpg' } ]
+			}],
 		dateOfCreation: "10:00am"
 	},
 	{
@@ -44,7 +51,14 @@ exports.fakeFlights = function() {
 		activityIcon: "fa fa-cutlery",
 		time: "2:45am",
 		location: "Amherst",
-		members: [1, 3],
+		members: [{
+			id: '1557156321', 
+			name:
+				{ familyName: 'Gutterman',
+				  givenName: 'Lucas',
+					 middleName: 'Rockett' },
+			photos: [ { value: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-frc1/t1.0-1/p50x50/1898055_10203278142625148_6400395_t.jpg' } ]
+			}],
 		dateOfCreation: "10:00am"
 	},{
 		id: 2,
@@ -52,7 +66,14 @@ exports.fakeFlights = function() {
 		activityIcon: "fa fa-user",
 		time: "12:00pm",
 		location: "Student Union",
-		members: [2],
+		members: [{
+			id: '1557156321', 
+			name:
+				{ familyName: 'Gutterman',
+				  givenName: 'Lucas',
+					 middleName: 'Rockett' },
+			photos: [ { value: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-frc1/t1.0-1/p50x50/1898055_10203278142625148_6400395_t.jpg' } ]
+			}],
 		dateOfCreation: "10:00am"
 	}];
 };

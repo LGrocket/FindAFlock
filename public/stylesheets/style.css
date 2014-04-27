@@ -24,3 +24,10 @@ div.flight-info {
 i.fa {
 	padding-right: .5em;
 }
+
+ul.flight-member li {
+	list-style-type: none;
+}
+ul.flight-member {
+	padding: 0;
+}
