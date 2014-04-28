@@ -26,8 +26,26 @@
         </div>
 
         <div class="content">
-			  <% if(typeof(userFlight) === 'undefined') { %>
-            <h2 class="content-subhead">My Flight</h2>
+			  <% //TODO: include flighs user has joined %>
+			  <% if(false) { %>
+            <h2 class="content-subhead">My Flights</h2>
+					<thead>
+						<tr>
+							<th>Location</th>
+							<th>Time</th>
+							<th>Members in Flock</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="flight flight-<%= userFlight.id %>">
+							<td class="flight-location"><a href="/flight/<%= userFlight.id %>"><%= userFlight.location %></a></td>
+							<td class="flight-time"><a href="/flight/<%= userFlight.id %>"><%= userFlight.time %></a></td>
+						</a>
+						<td class="flight-members"><a href="/flight/<%= userFlight.id %>"><%= userFlight.members.length %></a></td>
+						</a>
+						</tr>
+					</tbody>
+				</table>
 				<% } %>
 
             <h2 class="content-subhead">Friends Flights</h2>

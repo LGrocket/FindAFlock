@@ -72,20 +72,22 @@ app.get('/dashboard', ensureAuthenticated, function(req, res){
 		  fFlights.push( controller.deserializeFlight(flightID) );
 	  });
   });
-  var lFlights = [];
+  //TODO: locationRadius is user setting
   var locationRadius = 10;
-  //dal.getLocalFlights(controller.facebookLocation(req.user, locationRadius, function(error, result) {
-	  //if(error) { return; }
-	  //result.forEach(function(lFlightID) {
-		  //lFlights.push ( controller.deserializeFlight(FlightID) );
+  var lFlights = [];
+  //getUserCurrentLocation(req.user.id, function(error, location) {
+	  //dal.getLocalFlights(location, locationRadius, function(error, result) {
+		  //if(error) { return; }
+		  //result.forEach(function(lFlightID) {
+			  //lFlights.push ( controller.deserializeFlight(FlightID) );
+		  //});
 	  //});
-  //}); 
-	var userFlight;
-  dal.getUserCurrentFlight(req.user.id, function(error, result) {
-		if(!error) {
-			userFlight = controller.deserializeFlight(result);
-		}
-  });
+	  var userFlight;
+	  dal.getUserCurrentFlight(req.user.id, function(error, result) {
+		  if(!error) {
+			  userFlight = controller.deserializeFlight(result);
+		  }
+	  });
   res.render('dashboard', { title: "Dashboard", fFlights: controller.fakeFlights(), lFlights: controller.fakeFlights(), user: req.user, userFlight: userFlight } );
 });
 
@@ -117,7 +119,7 @@ app.get('/newflight/:type', ensureAuthenticated, function(req, res) {
 });
 app.post('/addFlight', function(req, res) {
 	dal.createFlight(function(err, id) {
-		dal.addUserToFlight(req.user.id, id);
+		dal.addUserToFlight(id, req.user.id);
 		dal.setFlightActivityType(id, req.body.type);
 		dal.setFlightTime(id, req.body.time);
 		dal.setFlightLocation(id, req.body.location);
