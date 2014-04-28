@@ -111,12 +111,12 @@ app.get('/newflight/:type', ensureAuthenticated, function(req, res) {
 	res.render('newflight', { title: "New Flight", user: req.user, type: req.route.params.type, icon: icon });
 });
 app.post('/addFlight', function(req, res) {
-	//TODO: data isn't saved!
-	var flightID = dal.createFlight();
-	dal.addUserToFlight(req.user.id, flightID);
-	dal.setFlightActivityType(flightID, req.body.type);
-	dal.setFlightTime(flightID, req.body.time);
-	dal.setFlightLocation(flightID, req.body.location);
+	dal.createFlight(function(err, id) {
+		dal.addUserToFlight(req.user.id, id);
+		dal.setFlightActivityType(id, req.body.type);
+		dal.setFlightTime(id, req.body.time);
+		dal.setFlightLocation(id, req.body.location);
+	});
 	res.redirect('/dashboard');
 });
 app.get('/account', ensureAuthenticated, function(req, res){

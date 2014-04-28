@@ -1,11 +1,7 @@
 //from http://howtonode.org/node-js-and-mongodb-getting-started-with-mongojs
 
-//var databaseUrl =  "vagrant@10.0.2.2/test";
+var databaseUrl =  "vagrant@10.0.2.2/test";
 var collections = ["users", "flights"];
-//for heroku
-var databaseUrl = process.env.MONGOLAB_URI ||
-  process.env.MONGOHQ_URL ||
-    'vagrant@10.0.2.2/test';
 
 var db = require('mongojs').connect(databaseUrl, collections);
 
@@ -14,7 +10,6 @@ var db = require('mongojs').connect(databaseUrl, collections);
 //    *      Users    *
 //    *****************
 // Users: [{userID, current_location:[lat, long], current_flight:flightID}]
-exports.test = function() { console.log("Testing form the dal"); };
 
 exports.getFriendsFlights = function(users, cb) { 
     db.users.distinct("current_flight"
@@ -103,7 +98,7 @@ exports.getUserCurrentLocation = function(userID, cb){
             }
     );
     return this;
-}
+};
 exports.getUserCurrentFlight = function(userID, cb){
     db.users.findOne({"userID": userID},
             function(err, user) {
@@ -142,7 +137,7 @@ exports.createFlight = function(cb){
     );
     return this;
 }
-exports.addUserToFlight = function(userID, flightID, cb){
+exports.addUserToFlight = function(flightID, userID, cb){
     this.removeUserFromFlight(userID, flightID, null);
     this.setFlight(userID, flightID, null);
     db.flights.update({"_id": flightID}

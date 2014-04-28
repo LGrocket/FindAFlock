@@ -6,6 +6,7 @@ Vagrant.configure("2") do |config|
         db.vm.hostname = "db"
         db.vm.box = "hashicorp/precise32"
         db.vm.network :forwarded_port, guest: 27017, host: 27017
+        db.vm.network :forwarded_port, guest: 28017, host: 8000
         db.vm.provision :shell, :path => "scripts/db.sh"
     end
 
