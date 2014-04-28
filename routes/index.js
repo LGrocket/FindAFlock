@@ -1,5 +1,5 @@
 /* GET dashbaord if authenticaed, login page if unauthenticated */
-require('private/LRGgeneral.js');
+require('../private/LRGgeneral.js');
 exports.index = function(req, res){
   var localFlights = [];
   getLocalFlights(getUserCurrentLocation(user)).forEach(function(flightID) {

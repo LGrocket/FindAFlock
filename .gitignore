@@ -1,3 +1,6 @@
+#Sensitive data
+oauth.js
+
 #------Node.js------
 logs
 *.log

@@ -1,0 +1,51 @@
+<% include header %>
+<div id="layout">
+
+ <!-- Menu toggle -->
+ <a href="#menu" id="menuLink" class="menu-link">
+	  <!-- Hamburger icon -->
+	  <span></span>
+ </a>
+
+ <div id="menu">
+	  <div class="pure-menu pure-menu-open">
+		  <a "pure-menu-heading" href="/">FindAFlock</a>
+			<ul>
+				 <li><a href="/">Home</a></li>
+				 <li><a href="/profile">Profile</a></li>
+				 <li><a href="/logout">Logout</a></li>
+				 </li>
+			</ul>
+	  </div>
+ </div>
+    <div id="main">
+        <div class="header">
+            <h1>New Flight</h1>
+        </div>
+
+        <div class="content">
+			  <form name="addFlight" method="post" action="/addFlight">
+			  <div class="flight-info">
+				  </ul>
+				  <h3>at</h3>
+					  <input type="text" name="time" class="time" placeholder="Time">
+			  <h2>Let's grab</h2>
+			  <h3><i class="<%= icon %>"></i><%= type %></h3>
+			  <h4>at</h4>
+			  <h3><input type="text" name="location" class="location" placeholder="Place"></h3>
+		  </div>
+		  <input type="hidden" value="<%= type %>" name="type">
+		  <div class="soar">
+			  <button class="soar pure-button pure-button-primary" name="friends" value="true" type="submit">
+				  Soar with Friends</a>
+			  <button class="soar pure-button pure-button-primary" name="friends" value="false" type="submit">
+				  Soar with Locals</a>
+			  </form>
+		  </div>
+	  </div>
+    </div>
+</div>
+
+<script> $(function() { $('li.fb-profile img').tipsy(); });</script>
+<script src="/javascripts/ui.js"></script>
+<% include footer %>

@@ -1,8 +1,58 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+img#dash-logo {
+	margin-left: -.5em;
 }
 
-a {
-  color: #00B7FF;
+a.soar {
+	margin-top: 1em;
+	width: 90%;
+}
+button.soar {
+	margin-top: 1em;
+	width: 90%;
+}
+div.soar {
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+div.content {
+	padding-top: 1em;
+}
+
+div.flight-info {
+	text-align: center;
+	width: 100%;
+	margin: 0 auto;
+}
+i.fa {
+	padding-right: .5em;
+}
+
+ul.flight-member li {
+	list-style-type: none;
+}
+ul.flight-member {
+	padding: 0;
+}
+ul.new-flights li {
+	list-style-type: none;
+}
+ul.new-flights {
+	padding: 0;
+}
+ul.new-flights a {
+	background: #60bf21; /* this is a green */
+	color: white;
+}
+tr.flight a {
+	text-decoration: none;
+	color: inherit;
+}
+tr.flight a:hover {
+	text-decoration: none;
+	color: #93D0F9;
+}
+input{
+	text-align:center;
 }

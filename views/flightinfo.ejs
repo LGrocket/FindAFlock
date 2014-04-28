@@ -1,0 +1,53 @@
+<% include header %>
+<div id="layout">
+
+ <!-- Menu toggle -->
+ <a href="#menu" id="menuLink" class="menu-link">
+	  <!-- Hamburger icon -->
+	  <span></span>
+ </a>
+
+ <div id="menu">
+	  <div class="pure-menu pure-menu-open">
+		  <a "pure-menu-heading" href="/">FindAFlock</a>
+			<ul>
+				 <li><a href="/">Home</a></li>
+				 <li><a href="/profile">Profile</a></li>
+				 <li><a href="/logout">Logout</a></li>
+				 </li>
+			</ul>
+	  </div>
+ </div>
+    <div id="main">
+        <div class="header">
+            <h1>Flight Info</h1>
+        </div>
+
+        <div class="content">
+			  <div class="flight-info">
+				  <ul class="flight-member fb-profile">
+					  <% flight.members.forEach(function(member) { %>
+						  <li class="fb-profile">
+						  <img src="<%= member.photos[0].value %>" title="<%= member.name.givenName %>">
+						  </li>
+					  <% }); %>
+				  </ul>
+			  <h2>This flock is grabbing</h2>
+			  <h3><i class="<%= flight.activityIcon %>"></i><%= flight.activityType %></h3>
+			  <h4>at</h4>
+			  <h3><%= flight.location %></h3>
+		  </div>
+		  <div class="soar">
+			  <% if (userIsMember) { %>
+				  <a class="soar pure-button" href="/leave">Leave Flock</a>
+			  <% } else { %>
+				  <a class="soar pure-button pure-button-primary" href="/join/<%= flight.id %>">Soar</a>
+			  <% } %>
+		  </div>
+	  </div>
+    </div>
+</div>
+
+<script> $(function() { $('li.fb-profile img').tipsy(); });</script>
+<script src="/javascripts/ui.js"></script>
+<% include footer %>

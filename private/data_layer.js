@@ -1,14 +1,33 @@
 //from http://howtonode.org/node-js-and-mongodb-getting-started-with-mongojs
 
-var databaseUrl =  "vagrant@10.0.2.2/test"
-var collections = ["users", "flights"]
+var databaseUrl =  "vagrant@10.0.2.2/test";
+var collections = ["users", "flights"];
 
 var db = require('mongojs').connect(databaseUrl, collections);
+
 
 //    *****************
 //    *      Users    *
 //    *****************
 // Users: [{userID, current_location:[lat, long], current_flight:flightID}]
+
+exports.getFriendsFlights = function(users, cb) { 
+    db.users.distinct("current_flight"
+                    , {"userID": { $in: users }}
+                    , function(err, result){
+                        if (typeof cb === 'function'){
+                            if (err){
+                                cb(err);
+                            } else if (!result) {
+                                cb("Connection Error");
+                            } else {
+                                cb(null, result);
+                            }
+                        }
+                    }
+    );
+    return this;
+};
 
 exports.addUser = function(userID, location, cb){
     db.users.update( {"userID": userID}
@@ -27,7 +46,7 @@ exports.addUser = function(userID, location, cb){
             }
     );
     return this;
-}
+};
 exports.setLocation = function(userID, location, cb){
     db.users.update( {"userID": userID}
             ,{ $set: {"location": location} }
@@ -45,7 +64,7 @@ exports.setLocation = function(userID, location, cb){
             }
     );
     return this;
-}
+};
 exports.setFlight = function(userID, flockID, cb){
     db.users.update( {"userID": userID}
             ,{ $set: {"current_flock": flockID} }
@@ -63,7 +82,7 @@ exports.setFlight = function(userID, flockID, cb){
             }
     );
     return this;
-}
+};
 exports.getUserCurrentLocation = function(userID, cb){
     db.users.findOne({"userID": userID},
             function(err, user) {
@@ -79,7 +98,7 @@ exports.getUserCurrentLocation = function(userID, cb){
             }
     );
     return this;
-}
+};
 exports.getUserCurrentFlight = function(userID, cb){
     db.users.findOne({"userID": userID},
             function(err, user) {
@@ -95,7 +114,7 @@ exports.getUserCurrentFlight = function(userID, cb){
             }
     );
     return this;
-}
+};
 
 //    *****************
 //    *    Flights    *
@@ -119,6 +138,7 @@ exports.createFlight = function(cb){
     return this;
 }
 exports.addUserToFlight = function(flightID, userID, cb){
+    this.removeUserFromFlight(userID, flightID, null);
     this.setFlight(userID, flightID, null);
     db.flights.update({"_id": flightID}
                     ,{ $push : { "flock": userID}}
@@ -135,7 +155,25 @@ exports.addUserToFlight = function(flightID, userID, cb){
                     }
     );
     return this;
-}
+};
+exports.removeUserFromFlight = function(userID, flightID, cb){
+    this.setFlight(userID, null, null);
+    db.flight.update({"flightID": flightID}
+                    ,{ $pull: { "flock": userID } }
+                    ,function(err, result){
+                        if (typeof cb === 'function'){
+                            if (err){
+                                cb(err);
+                            } else if (!result) {
+                                cb("Connection Error");
+                            } else {
+                                cb(null, result.activity_type);
+                            }
+                        }
+                    }
+    );
+    return this;
+};
 exports.setFlightActivityType = function(flightID, activity_type, cb){
     db.flights.update( {"_id": flightID}
         ,{ $set: {"activity_type": activity_type} }
@@ -153,7 +191,7 @@ exports.setFlightActivityType = function(flightID, activity_type, cb){
         }
     );
     return this;
-}
+};
 exports.setFlightActivity = function(flightID, activity, cb){
     db.flights.update( {"_id": flightID}
         ,{ $set: {"activity": activity} }
@@ -171,7 +209,7 @@ exports.setFlightActivity = function(flightID, activity, cb){
         }
     );
     return this;
-}
+};
 exports.setFlightTime = function(flightID, start_time, cb){
      db.flights.update( {"_id": flightID}
         ,{ $set: {"time": start_time} }
@@ -189,7 +227,7 @@ exports.setFlightTime = function(flightID, start_time, cb){
         }
     );
     return this;
-}
+};
 exports.setFlightLocation = function(flightID, location, cb){
     db.flights.update( {"_id": flightID}
         ,{ $set: {"location": location} }
@@ -207,7 +245,7 @@ exports.setFlightLocation = function(flightID, location, cb){
         }
     );
     return this;
-}
+};
 exports.getLocalFlights = function(location, distance, cb){
     db.flights.find({'location.0': { $gte: location[0]-distance, $lte: location[0]+distance}, 'location.1': { $gte: location[1]-distance, $lte: location[1]+distance}}
                     ,{_id: 1}
@@ -227,7 +265,7 @@ exports.getLocalFlights = function(location, distance, cb){
                     }
     );
     return this;
-}
+};
 exports.getFlightMembers = function(flightID, cb){
     db.flights.findOne({"_id": flightID},
                     function(err, result){
@@ -243,7 +281,7 @@ exports.getFlightMembers = function(flightID, cb){
                     }
     );
     return this;
-}
+};
 exports.getFlightActivity = function(flightID, cb){
     db.flights.findOne({"_id": flightID},
                     function(err, result){
@@ -258,7 +296,7 @@ exports.getFlightActivity = function(flightID, cb){
                         }
                     });
     return this;
-}
+};
 exports.getFlightActivityType = function(flightID, cb){
     db.flights.findOne({"_id": flightID},
                     function(err, result){
@@ -274,7 +312,7 @@ exports.getFlightActivityType = function(flightID, cb){
                     }
     );
     return this;
-}
+};
 exports.getFlightDoC = function(flightID, cb){
     db.flights.findOne({"_id": flightID},
                     function(err, result){
@@ -290,7 +328,7 @@ exports.getFlightDoC = function(flightID, cb){
                     }
     );
     return this;
-}
+};
 exports.getFlightTime = function(flightID, cb){
     db.flights.findOne({"_id": flightID},
                     function(err, result){
@@ -306,7 +344,7 @@ exports.getFlightTime = function(flightID, cb){
                     }
     );
     return this;
-}
+};
 exports.getFlightLocation = function(flightID, cb){
     db.flights.findOne({"_id": flightID},
                     function(err, result){
@@ -322,4 +360,4 @@ exports.getFlightLocation = function(flightID, cb){
                     }
     );
     return this;
-}
+};
