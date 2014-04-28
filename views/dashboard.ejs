@@ -49,6 +49,7 @@
 				<% } %>
 
             <h2 class="content-subhead">Friends Flights</h2>
+				<% if(fFlights.length !== 0) {
 				<table class="fFlights pure-table">
 					<thead>
 						<tr>
@@ -69,7 +70,11 @@
 					<% }); %>
 					</tbody>
 				</table>
-
+			<% } %>
+			<% else { %>
+				<i class="fa fa-frown-o"></i><p>None of your friends have created a flight.</p>
+			<% } >
+			<% if(lFlights.length !== 0) { %>
             <h2 class="content-subhead">Local Flights</h2>
 				<table class="lFlights pure-table">
 					<thead>
@@ -89,6 +94,9 @@
 					<% }); %>
 					</tbody>
 				</table>
+				<% else { %>
+					<i class="fa fa-frown-o"></i><p>There are no public local flights in your area.</p>
+				<% } %>
 
             <h2 class="content-subhead">Let's Grab</h2>
 				<ul class="new-flights">

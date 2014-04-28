@@ -67,11 +67,19 @@ app.get('/', function(req, res){
 );
 app.get('/dashboard', ensureAuthenticated, function(req, res){
   var fFlights = [];
-  dal.getFriendsFlights(req.user.friends, function(error, result){
-	  result.forEach(function(lFlightID) {
-		  fFlights.push( controller.deserializeFlight(flightID) );
-	  });
-  });
+  var friendIDs = [];
+  //console.log(req.user._raw.friends);
+  //req.user._raw.friends.data.forEach(function(data) {
+		//friendIDs.push(data.id);
+  //});
+  //console.dir(req.user);
+  //dal.getFriendsFlights(friendIDs, function(error, result){
+	  //if(!error) {
+		  //result.forEach(function(lFlightID) {
+			  //fFlights.push( controller.deserializeFlight(flightID) );
+		  //});
+	  //}
+  //});
   //TODO: locationRadius is user setting
   var locationRadius = 10;
   var lFlights = [];
