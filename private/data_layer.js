@@ -11,7 +11,23 @@ var db = require('mongojs').connect(databaseUrl, collections);
 //    *****************
 // Users: [{userID, current_location:[lat, long], current_flight:flightID}]
 
-exports.getFriendsFlights = function() { return [0, 1, 2]; };
+exports.getFriendsFlights = function(users, cb) { 
+    db.users.distinct("current_flight"
+                    , {"userID": { $in: users }}
+                    , function(err, result){
+                        if (typeof cb === 'function'){
+                            if (err){
+                                cb(err);
+                            } else if (!result) {
+                                cb("Connection Error");
+                            } else {
+                                cb(null, result);
+                            }
+                        }
+                    }
+    );
+    return this;
+};
 
 exports.addUser = function(userID, location, cb){
     db.users.update( {"userID": userID}
@@ -120,8 +136,9 @@ exports.createFlight = function(cb){
             }
     );
     return this;
-};
+}
 exports.addUserToFlight = function(flightID, userID, cb){
+    this.removeUserFromFlight(userID, flightID, null);
     this.setFlight(userID, flightID, null);
     db.flights.update({"_id": flightID}
                     ,{ $push : { "flock": userID}}
@@ -133,6 +150,24 @@ exports.addUserToFlight = function(flightID, userID, cb){
                                 cb("User not found");
                             } else {
                                 cb(null, user.current_flock);
+                            }
+                        }
+                    }
+    );
+    return this;
+};
+exports.removeUserFromFlight = function(userID, flightID, cb){
+    this.setFlight(userID, null, null);
+    db.flight.update({"flightID": flightID}
+                    ,{ $pull: { "flock": userID } }
+                    ,function(err, result){
+                        if (typeof cb === 'function'){
+                            if (err){
+                                cb(err);
+                            } else if (!result) {
+                                cb("Connection Error");
+                            } else {
+                                cb(null, result.activity_type);
                             }
                         }
                     }
