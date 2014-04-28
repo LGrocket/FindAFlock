@@ -6,7 +6,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var config = require('./oauth.js');
-var request = require('request-json');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var controller = require('./private/LRGgeneral.js');
@@ -31,7 +30,10 @@ passport.use(new FacebookStrategy({
 	profileFields: ['id', 'name', 'photos', 'location', 'friends']
 },
 	function(accessToken, refreshToken, profile, done) {
-	  dal.addUser(profile.id, controller.getLocation(), function(err) {
+
+	  //TODO: fix facebook location function
+	  //dal.addUser(profile.id, controller.facebookLocation(profile), function(err) {
+	  dal.addUser(profile.id, [42.3803, -72.5236], function(err) {
 		  console.log(err);
 	  });
 	  return done(null, profile);
@@ -56,7 +58,6 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
-//var fbGraph = request.newClient('https://graph.facebook.com/');
 app.get('/', function(req, res){
 	  if(req.isAuthenticated())
 		  res.redirect('dashboard');
@@ -65,25 +66,29 @@ app.get('/', function(req, res){
 	}
 );
 app.get('/dashboard', ensureAuthenticated, function(req, res){
-  //var fFlights = [];
-  //var fFlightsID = dal.getFriendsFlights(req.user.friends);
-  //fFlightsID.forEach(function(flightID) {
-	  //fFlights.push( controller.deserializeFlight(flightID) );
-  //});
-	//TODO: get location and find local flights
-	//fbGraph.get(req.user._json.location.id);
-		//var loc = [data.location.latitude, data.location.longitude];
-		//});
-  //var lFlights = [];
-  //getLocalFlights(loc, locationRadius).forEach( function(lFlightID) {
-	  //lFlights.push ( controller.deserializeFlight(FlightID) );
-  //});
-
-  //TODO: fakeFlights
-	var userIsMember = false;
-  //if(dal.getUserCurrentFlight(req.user.id)) { userIsMember = true; }
-  res.render('dashboard', { title: "Dashboard", fFlights: controller.fakeFlights(), lFlights: controller.fakeFlights(), user: req.user, userIsMember: userIsMember } );
+  var fFlights = [];
+  dal.getFriendsFlights(req.user.friends, function(error, result){
+	  result.forEach(function(lFlightID) {
+		  fFlights.push( controller.deserializeFlight(flightID) );
+	  });
+  });
+  var lFlights = [];
+  var locationRadius = 10;
+  //dal.getLocalFlights(controller.facebookLocation(req.user, locationRadius, function(error, result) {
+	  //if(error) { return; }
+	  //result.forEach(function(lFlightID) {
+		  //lFlights.push ( controller.deserializeFlight(FlightID) );
+	  //});
+  //}); 
+	var userFlight;
+  dal.getUserCurrentFlight(req.user.id, function(error, result) {
+		if(!error) {
+			userFlight = controller.deserializeFlight(result);
+		}
+  });
+  res.render('dashboard', { title: "Dashboard", fFlights: controller.fakeFlights(), lFlights: controller.fakeFlights(), user: req.user, userFlight: userFlight } );
 });
+
 app.get('/flight/:id', ensureAuthenticated, function(req, res) {
   //TODO: fakeFlights
 	//var flight = controller.serializeFlight(req.route.params.id);

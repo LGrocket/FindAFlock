@@ -1,4 +1,6 @@
 var dal = require('./data_layer.js');
+var request = require('superagent');
+
 //Returns the class of the Font Awesome icon associated with the
 //passed activityType in plaintext
 exports.activityIcon = function(activityType) {
@@ -12,14 +14,35 @@ exports.activityIcon = function(activityType) {
 	}
 };
 
+exports.facebookLocation = function(user) {
+	request.get('https://graph.facebook.com/'+user._json.location.id).end(function(res) {
+		return [JSON.parse(res.text).location.latitude, JSON.parse(res.text).location.longitude]; });
+};
+
 exports.deserializeFlight = function (flightID) {
+	var aT, t, l, m, d;
+	dal.getFlightActivityType(flightID, function(error, result) {
+		aT = result;
+	});
+	dal.getFlightTime(flightID, function(error, result ) {
+		t = result;
+	});
+	dal.getFlightLocation(flightID, function(error, result) {
+		l = result;
+	});
+	dal.getFlightMembers(flightID, function(error, result) {
+		m = result;
+	});
+	dal.getFlightDoC(flightID, function(error, result) {
+		d = result;
+	});
 	return {
 		id: flightID,
-		activityType: dal.getFlightActivityType(flightID),
-		time: dal.getFlightTime(flightID),
-		location: dal.getFlightLocation(flightID),
-		members: dal.getFlightMembers(flightID),
-		dateOfCreation: dal.getFlightDoC(flightID)
+		activityType: aT,
+		time: t,
+		location: l,
+		members: m,
+		dateOfCreation: d
 	};
 };
 
