@@ -87,19 +87,16 @@ app.get('/dashboard', ensureAuthenticated, function(req, res){
 			  //console.log("Friend Flights!");
 			  //console.dir(result);
 			  //result.forEach(function(lFlightID) {
-				  //fFlights.push( controller.deserializeFlight(flightID) );
+				  //controller.deserializeFlight(flightID, function(res) {
+						//fFlights.push(res);
+				  //}); 
 			  //});
 		  //}
 		  //else { console.log(error); }
-  //});
-	  console.log("fake friend ID");
-	  controller.fakeFriendFlight(function(flightID) {
-		  controller.deserializeFlight(flightID, function(res) { console.log(res); });
-	  });
-	  //fFlights.push(controller.deserializeFlight(controller.fakeFriendFlight()));
-	  //console.log("mocked friendFlights");
-	  //console.dir(fFlights);
   });
+	  controller.fakeFriendFlight(function(flightID) {
+		  controller.deserializeFlight(flightID, function(res) { fFlights.push(res); });
+	  });
   //TODO: locationRadius is user setting
   var locationRadius = 10;
   var lFlights = [];
@@ -110,14 +107,20 @@ app.get('/dashboard', ensureAuthenticated, function(req, res){
 			  //lFlights.push ( controller.deserializeFlight(FlightID) );
 		  //});
 	  //});
-	  //var userFlight;
-	  //dal.getUserCurrentFlight(req.user.id, function(error, result) {
-		  //if(!error) {
-			  //userFlight = controller.deserializeFlight(result);
-		  //}
-	  //});
+	  var userFlight;
+	  dal.getUserCurrentFlight(req.user.id, function(error, result) {
+		  if(!error) {
+			  controller.deserializeFlight(result, function(res) {
+				  userFlight = res;
+			  });
+		  }
+		  else { 
+			  console.log("Error on getUserCurrentFlight in Dashboard"); 
+			  console.log(error); 
+		  }
+	  });
   //});
-  res.render('dashboard', { title: "Dashboard", fFlights: controller.fakeFlights(), lFlights: controller.fakeFlights(), user: req.user, userFlight: userFlight } );
+  res.render('dashboard', { title: "Dashboard", fFlights: fFlights, lFlights: controller.fakeFlights(), user: req.user, userFlight: userFlight } );
 });
 
 app.get('/flight/:id', ensureAuthenticated, function(req, res) {
