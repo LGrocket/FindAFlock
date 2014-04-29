@@ -65,9 +65,9 @@ exports.setLocation = function(userID, location, cb){
     );
     return this;
 };
-exports.setFlight = function(userID, flockID, cb){
+exports.setFlight = function(userID, flightID, cb){
     db.users.update( {"userID": userID}
-            ,{ $set: {"current_flock": flockID} }
+            ,{ $set: {"current_flight": flightID} }
             ,{}
             ,function(err, result){
                 if (typeof cb === 'function'){
@@ -108,7 +108,7 @@ exports.getUserCurrentFlight = function(userID, cb){
                     } else if (!user) {
                         cb("User not found");
                     } else {
-                        cb(null, user.current_flock);
+                        cb(null, user.current_flight);
                     }
                 }
             }
@@ -149,7 +149,7 @@ exports.addUserToFlight = function(flightID, userID, cb){
                             } else if (!user) {
                                 cb("User not found");
                             } else {
-                                cb(null, user.current_flock);
+                                cb(null, user.current_flight);
                             }
                         }
                     }
@@ -158,7 +158,7 @@ exports.addUserToFlight = function(flightID, userID, cb){
 };
 exports.removeUserFromFlight = function(userID, flightID, cb){
     this.setFlight(userID, null, null);
-    db.flights.update({"flightID": flightID}
+    db.flight.update({"_id": flightID}
                     ,{ $pull: { "flock": userID } }
                     ,function(err, result){
                         if (typeof cb === 'function'){
