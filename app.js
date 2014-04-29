@@ -82,21 +82,22 @@ app.get('/dashboard', ensureAuthenticated, function(req, res){
 			friendIDs.push(friend.id);
 	  });
 	  //dal.getFriendsFlights(friendIDs, function(error, result){
-	  //dal.getFriendsFlights(['717096257'], function(error, result){
-		  //if(!error) {
-			  //console.log("Friend Flights!");
-			  //console.dir(result);
-			  //result.forEach(function(lFlightID) {
-				  //controller.deserializeFlight(flightID, function(res) {
-						//fFlights.push(res);
-				  //}); 
-			  //});
-		  //}
-		  //else { console.log(error); }
-  });
-	  controller.fakeFriendFlight(function(flightID) {
-		  controller.deserializeFlight(flightID, function(res) { fFlights.push(res); });
+	  dal.getFriendsFlights(['717096257'], function(error, result){
+		  if(!error) {
+			  console.log("Friend Flights!");
+			  console.dir(result);
+			  result.forEach(function(lFlightID) {
+				  controller.deserializeFlight(flightID, function(res) {
+						fFlights.push(res);
+				  }); 
+			  });
+		  }
+		  else { console.log(error); }
 	  });
+  });
+	  //controller.fakeFriendFlight(function(flightID) {
+		  //controller.deserializeFlight(flightID, function(res) { fFlights.push(res); });
+	  //});
   //TODO: locationRadius is user setting
   var locationRadius = 10;
   var lFlights = [];
@@ -149,8 +150,11 @@ app.get('/newflight/:type', ensureAuthenticated, function(req, res) {
 	var icon = controller.activityIcon(req.route.params.type);
 	res.render('newflight', { title: "New Flight", user: req.user, type: req.route.params.type, icon: icon });
 });
-app.post('/addFlight', function(req, res) {
+app.post('/addFlight', ensureAuthenticated, function(req, res) {
 	dal.createFlight(function(err, id) {
+		console.log("Error in addflight");
+		console.log(id);
+		console.log(req.user.id);
 		dal.addUserToFlight(id, req.user.id);
 		dal.setFlightActivityType(id, req.body.type);
 		dal.setFlightTime(id, req.body.time);
