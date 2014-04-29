@@ -19,36 +19,43 @@ exports.facebookLocation = function(user) {
 		return [JSON.parse(res.text).location.latitude, JSON.parse(res.text).location.longitude]; });
 };
 
-exports.deserializeFlight = function (flightID) {
+exports.deserializeFlight = function (flightID, cb) {
+	var thisFlightID = flightID;
 	var aT, t, l, m, d;
-	dal.getFlightActivityType(flightID, function(error, result) {
+	dal.getFlightActivityType(thisFlightID, function(error, result) {
 		aT = result;
+		dal.getFlightTime(thisFlightID, function(error, result ) {
+			t = result;
+			dal.getFlightLocation(thisFlightID, function(error, result) {
+				l = result;
+				dal.getFlightMembers(thisFlightID, function(error, result) {
+					m = result;
+					dal.getFlightDoC(thisFlightID, function(error, result) {
+						d = result;
+						return cb({
+							id: thisFlightID,
+							activityType: aT,
+							time: t,
+							location: l,
+							members: m,
+							dateOfCreation: d
+						});
+					});
+				});
+			});
+		});
 	});
-	dal.getFlightTime(flightID, function(error, result ) {
-		t = result;
-	});
-	dal.getFlightLocation(flightID, function(error, result) {
-		l = result;
-	});
-	dal.getFlightMembers(flightID, function(error, result) {
-		m = result;
-	});
-	dal.getFlightDoC(flightID, function(error, result) {
-		d = result;
-	});
-	return {
-		id: flightID,
-		activityType: aT,
-		time: t,
-		location: l,
-		members: m,
-		dateOfCreation: d
-	};
 };
 
 //Get location stub
 exports.getLocation = function () {
 	return "Amerhst";
+};
+
+exports.fakeFriendFlight = function(cb) {
+	dal.getUserCurrentFlight('717096257', function(error, result) {
+		return cb(result);
+	});
 };
 
 exports.fakeFlights = function() {

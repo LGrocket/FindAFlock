@@ -49,7 +49,8 @@
 				<% } %>
 
             <h2 class="content-subhead">Friends Flights</h2>
-				<% if(fFlights.length !== 0) {
+				<% if(fFlights.length !== 0) { %>
+				<% console.dir(fFlights); %>
 				<table class="fFlights pure-table">
 					<thead>
 						<tr>
@@ -70,8 +71,7 @@
 					<% }); %>
 					</tbody>
 				</table>
-			<% } %>
-			<% else { %>
+			<% } else {%>
 				<i class="fa fa-frown-o"></i><p>None of your friends have created a flight.</p>
 			<% } >
 			<% if(lFlights.length !== 0) { %>
