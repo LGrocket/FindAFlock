@@ -28,6 +28,9 @@ div.flight-info {
 i.fa {
 	padding-right: .5em;
 }
+i.fa.pull-left {
+	margin-right: -2.7em;
+}
 
 ul.flight-member li {
 	list-style-type: none;
