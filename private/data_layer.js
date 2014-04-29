@@ -158,7 +158,7 @@ exports.addUserToFlight = function(flightID, userID, cb){
 };
 exports.removeUserFromFlight = function(userID, flightID, cb){
     this.setFlight(userID, null, null);
-    db.flight.update({"flightID": flightID}
+    db.flight.update({"_id": flightID}
                     ,{ $pull: { "flock": userID } }
                     ,function(err, result){
                         if (typeof cb === 'function'){
