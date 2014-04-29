@@ -34,6 +34,8 @@ i.fa.pull-left {
 
 ul.flight-member li {
 	list-style-type: none;
+	display: inline-block;
+	padding: 0 .5em;
 }
 ul.flight-member {
 	padding: 0;

@@ -121,18 +121,17 @@ app.get('/dashboard', ensureAuthenticated, function(req, res){
 		  }
 	  });
   //});
-  res.render('dashboard', { title: "Dashboard", fFlights: fFlights, lFlights: controller.fakeFlights(), user: req.user, userFlight: userFlight } );
+  res.render('dashboard', { title: "Dashboard", fFlights: controller.fakeFlights2(), lFlights: controller.fakeFlights(), user: req.user, userFlight: userFlight } );
 });
 
 app.get('/flight/:id', ensureAuthenticated, function(req, res) {
   //TODO: fakeFlights
 	//var flight = controller.serializeFlight(req.route.params.id);
-	var fakeFlight = controller.fakeFlights()[0];
-	res.render('flightinfo', { title: "Flight Info", user: req.user, flight: fakeFlight, userIsMember: false });
+	res.render('flightinfo', { title: "Flight Info", user: req.user, flight: controller.fakeFlights2()[0], userIsMember: false });
 });
 app.get('/join/:id', ensureAuthenticated, function(req, res) {
-	dal.addUserToFlight(req.route.params.id, req.user.id);
-	var fakeFlight = controller.fakeFlights()[0];
+	//dal.addUserToFlight(req.route.params.id, req.user.id);
+	var fakeFlight = controller.fakeFlights1()[0];
 	//controller.deserializeFlight(req.route.params.id).members.forEach(function(member) {
 		//if (member.id === user.id) { var userIsMember = true; }
 	//});
@@ -151,15 +150,15 @@ app.get('/newflight/:type', ensureAuthenticated, function(req, res) {
 	res.render('newflight', { title: "New Flight", user: req.user, type: req.route.params.type, icon: icon });
 });
 app.post('/addFlight', ensureAuthenticated, function(req, res) {
-	dal.createFlight(function(err, id) {
-		console.log("Error in addflight");
-		console.log(id);
-		console.log(req.user.id);
-		dal.addUserToFlight(id, req.user.id);
-		dal.setFlightActivityType(id, req.body.type);
-		dal.setFlightTime(id, req.body.time);
-		dal.setFlightLocation(id, req.body.location);
-	});
+	//dal.createFlight(function(err, id) {
+		//console.log("Error in addflight");
+		//console.log(id);
+		//console.log(req.user.id);
+		//dal.addUserToFlight(id, req.user.id);
+		//dal.setFlightActivityType(id, req.body.type);
+		//dal.setFlightTime(id, req.body.time);
+		//dal.setFlightLocation(id, req.body.location);
+	//});
 	res.redirect('/dashboard');
 });
 app.get('/account', ensureAuthenticated, function(req, res){

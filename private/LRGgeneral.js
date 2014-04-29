@@ -1,5 +1,4 @@
 var dal = require('./data_layer.js');
-var request = require('superagent');
 
 //Returns the class of the Font Awesome icon associated with the
 //passed activityType in plaintext
@@ -58,6 +57,42 @@ exports.fakeFriendFlight = function(cb) {
 	});
 };
 
+exports.fakeFlights2 = function() {
+	return [{
+		id: 0,
+		activityType: "Drinks",
+		activityIcon: "fa fa-glass",
+		time: "6:34pm",
+		location: "High Horse",
+		members: [			{
+			id: '717096257',
+			name: { familyName: 'Yacono',
+				  givenName: 'Christina' },
+			photos: [ { value: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t1.0-1/c0.7.50.50/p50x50/1382921_10152292795321258_1931574293_t.jpg' } ], 
+		dateOfCreation: "10:00am"}]}];
+};
+exports.fakeFlights1 = function() {
+	return [{
+		id: 0,
+		activityType: "Drinks",
+		activityIcon: "fa fa-glass",
+		time: "6:34pm",
+		location: "High Horse",
+		members: [{
+			id: '717096257', 
+			name:
+				{ familyName: 'Gutterman',
+				  givenName: 'Lucas',
+					 middleName: 'Rockett' },
+			photos: [ { value: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-frc1/t1.0-1/p50x50/1898055_10203278142625148_6400395_t.jpg' } ]
+			},
+			{
+			id: '717096257',
+			name: { familyName: 'Yacono',
+				  givenName: 'Christina' },
+			photos: [ { value: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t1.0-1/c0.7.50.50/p50x50/1382921_10152292795321258_1931574293_t.jpg' } ], 
+		dateOfCreation: "10:00am"}]}];
+};
 exports.fakeFlights = function() {
 	return [{
 		id: 0,
@@ -107,3 +142,29 @@ exports.fakeFlights = function() {
 		dateOfCreation: "10:00am"
 	}];
 };
+exports.fakeFlights1 = function() {
+	return [{
+		id: 0,
+		activityType: "Drinks",
+		activityIcon: "fa fa-glass",
+		time: "6:00PM",
+		location: "High Horse",
+		members: [{
+			id: '1557156321', 
+			name:
+				{ familyName: 'Gutterman',
+				  givenName: 'Lucas',
+					 middleName: 'Rockett' },
+			photos: [ { value: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-frc1/t1.0-1/p50x50/1898055_10203278142625148_6400395_t.jpg' } ]
+			},
+			{
+			id: '717096257', 
+			name:
+				{ familyName: 'Yoooho',
+				  givenName: 'Christina',
+					 middleName: 'Rockett' },
+			photos: [ { value: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t1.0-1/c0.7.50.50/p50x50/1382921_10152292795321258_1931574293_t.jpg' } ]
+			}],
+		dateOfCreation: "10:00am"
+	}];
+	};
