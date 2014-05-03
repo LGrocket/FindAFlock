@@ -10,7 +10,11 @@ var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var controller = require('./private/LRGgeneral.js');
 var dal = require('./private/data_layer.js');
+<<<<<<< HEAD
 var bson= require('bson');
+=======
+var fb = require('fb');
+>>>>>>> b97e9bfc84ae36081c581660394e2002b97b6534
 
 //var routes = require('./routes');
 
@@ -34,6 +38,7 @@ passport.use(new FacebookStrategy({
 
 	  //TODO: fix facebook location function
 	  //dal.addUser(profile.id, controller.facebookLocation(profile), function(err) {
+	  fb.setAccessToken(accessToken);
 	  dal.addUser(profile.id, [42.3803, -72.5236], function(err) {
 		  console.log(err);
 	  });
@@ -68,11 +73,35 @@ app.get('/', function(req, res){
 );
 app.get('/dashboard', ensureAuthenticated, function(req, res){
   var fFlights = [];
-  dal.getFriendsFlights(req.user.friends, function(error, result){
-	  result.forEach(function(lFlightID) {
-		  fFlights.push( controller.deserializeFlight(flightID) );
+  fb.api(req.user.id, { fields: ['friends'], limit: "100000" }, function (res) {
+	  var friendIDs = [];
+	  if(!res || res.error) {
+		  console.log(!res ? 'error occurred' : res.error);
+		  return;
+	  }
+	  //fb.api(res.friends.paging.next, function(resNext) {
+			//console.dir(resNext);
+	  //});
+	  res.friends.data.forEach(function(friend) {
+			friendIDs.push(friend.id);
+	  });
+	  //dal.getFriendsFlights(friendIDs, function(error, result){
+	  dal.getFriendsFlights(['717096257'], function(error, result){
+		  if(!error) {
+			  console.log("Friend Flights!");
+			  console.dir(result);
+			  result.forEach(function(lFlightID) {
+				  controller.deserializeFlight(flightID, function(res) {
+						fFlights.push(res);
+				  }); 
+			  });
+		  }
+		  else { console.log(error); }
 	  });
   });
+	  //controller.fakeFriendFlight(function(flightID) {
+		  //controller.deserializeFlight(flightID, function(res) { fFlights.push(res); });
+	  //});
   //TODO: locationRadius is user setting
   var locationRadius = 10;
   var lFlights = [];
@@ -86,21 +115,27 @@ app.get('/dashboard', ensureAuthenticated, function(req, res){
 	  var userFlight;
 	  dal.getUserCurrentFlight(req.user.id, function(error, result) {
 		  if(!error) {
-			  userFlight = controller.deserializeFlight(result);
+			  controller.deserializeFlight(result, function(res) {
+				  userFlight = res;
+			  });
+		  }
+		  else { 
+			  console.log("Error on getUserCurrentFlight in Dashboard"); 
+			  console.log(error); 
 		  }
 	  });
-  res.render('dashboard', { title: "Dashboard", fFlights: controller.fakeFlights(), lFlights: controller.fakeFlights(), user: req.user, userFlight: userFlight } );
+  //});
+  res.render('dashboard', { title: "Dashboard", fFlights: controller.fakeFlights2(), lFlights: controller.fakeFlights(), user: req.user, userFlight: userFlight } );
 });
 
 app.get('/flight/:id', ensureAuthenticated, function(req, res) {
   //TODO: fakeFlights
 	//var flight = controller.serializeFlight(req.route.params.id);
-	var fakeFlight = controller.fakeFlights()[0];
-	res.render('flightinfo', { title: "Flight Info", user: req.user, flight: fakeFlight, userIsMember: false });
+	res.render('flightinfo', { title: "Flight Info", user: req.user, flight: controller.fakeFlights2()[0], userIsMember: false });
 });
 app.get('/join/:id', ensureAuthenticated, function(req, res) {
-	dal.addUserToFlight(req.route.params.id, req.user.id);
-	var fakeFlight = controller.fakeFlights()[0];
+	//dal.addUserToFlight(req.route.params.id, req.user.id);
+	var fakeFlight = controller.fakeFlights1()[0];
 	//controller.deserializeFlight(req.route.params.id).members.forEach(function(member) {
 		//if (member.id === user.id) { var userIsMember = true; }
 	//});
@@ -118,13 +153,16 @@ app.get('/newflight/:type', ensureAuthenticated, function(req, res) {
 	var icon = controller.activityIcon(req.route.params.type);
 	res.render('newflight', { title: "New Flight", user: req.user, type: req.route.params.type, icon: icon });
 });
-app.post('/addFlight', function(req, res) {
-	dal.createFlight(function(err, id) {
-		dal.addUserToFlight(id, req.user.id);
-		dal.setFlightActivityType(id, req.body.type);
-		dal.setFlightTime(id, req.body.time);
-		dal.setFlightLocation(id, req.body.location);
-	});
+app.post('/addFlight', ensureAuthenticated, function(req, res) {
+	//dal.createFlight(function(err, id) {
+		//console.log("Error in addflight");
+		//console.log(id);
+		//console.log(req.user.id);
+		//dal.addUserToFlight(id, req.user.id);
+		//dal.setFlightActivityType(id, req.body.type);
+		//dal.setFlightTime(id, req.body.time);
+		//dal.setFlightLocation(id, req.body.location);
+	//});
 	res.redirect('/dashboard');
 });
 app.get('/account', ensureAuthenticated, function(req, res){

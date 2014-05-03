@@ -1,76 +1,78 @@
 <% include header %>
 <div id="layout">
 
- <!-- Menu toggle -->
- <a href="#menu" id="menuLink" class="menu-link">
-	  <!-- Hamburger icon -->
-	  <span></span>
- </a>
+	<!-- Menu toggle -->
+	<a href="#menu" id="menuLink" class="menu-link">
+		<!-- Hamburger icon -->
+		<span></span>
+	</a>
 
- <div id="menu">
-	  <div class="pure-menu pure-menu-open">
-		  <a "pure-menu-heading" href="/">FindAFlock</a>
+	<div id="menu">
+		<div class="pure-menu pure-menu-open">
+			<a "pure-menu-heading" href="/">FindAFlock</a>
 			<ul>
-				 <li><a href="/">Home</a></li>
-				 <li><a href="/profile">Profile</a></li>
-				 <li><a href="/logout">Logout</a></li>
-				 </li>
+				<li><a href="/">Home</a></li>
+				<li><a href="/profile">Profile</a></li>
+				<li><a href="/logout">Logout</a></li>
+				</li>
 			</ul>
-	  </div>
- </div>
-    <div id="main">
-        <div class="header">
-			  <a href="/"><img id="dash-logo" src="images/FindAFlock-Futura-Light-fb.png"></a>
-            <h1>Dashboard</h1>
-            <h2>Checkout the flights you can join.</h2>
-        </div>
+		</div>
+	</div>
+	<div id="main">
+		<div class="header">
+			<a href="/"><img id="dash-logo" src="images/FindAFlock-Futura-Light-fb.png"></a>
+			<h1>Dashboard</h1>
+			<h2>Checkout the flights you can join.</h2>
+		</div>
 
-        <div class="content">
-			  <% //TODO: include flighs user has joined %>
-			  <% if(false) { %>
-            <h2 class="content-subhead">My Flights</h2>
-					<thead>
-						<tr>
-							<th>Location</th>
-							<th>Time</th>
-							<th>Members in Flock</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr class="flight flight-<%= userFlight.id %>">
-							<td class="flight-location"><a href="/flight/<%= userFlight.id %>"><%= userFlight.location %></a></td>
-							<td class="flight-time"><a href="/flight/<%= userFlight.id %>"><%= userFlight.time %></a></td>
-						</a>
-						<td class="flight-members"><a href="/flight/<%= userFlight.id %>"><%= userFlight.members.length %></a></td>
-						</a>
-						</tr>
-					</tbody>
-				</table>
-				<% } %>
+		<div class="content">
+			<% if(typeof(userFlights) !== 'undefined') { %>
+				<h2 class="content-subhead">My Flights</h2>
+				<thead>
+					<tr>
+						<th>Location</th>
+						<th>Time</th>
+						<th>Members in Flock</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="flight flight-<%= userFlight.id %>">
+						<td class="flight-location"><a href="/flight/<%= userFlight.id %>"><%= userFlight.location %></a></td>
+						<td class="flight-time"><a href="/flight/<%= userFlight.id %>"><%= userFlight.time %></a></td>
+					</a>
+					<td class="flight-members"><a href="/flight/<%= userFlight.id %>"><%= userFlight.members.length %></a></td>
+				</a>
+			</tr>
+		</tbody>
+	</table>
+<% } %>
 
-            <h2 class="content-subhead">Friends Flights</h2>
-				<table class="fFlights pure-table">
-					<thead>
-						<tr>
-							<th>Location</th>
-							<th>Time</th>
-							<th>Members in Flock</th>
-						</tr>
-					</thead>
-					<tbody>
-					<% fFlights.forEach(function(flight) { %>
-						<tr class="flight flight-<%= flight.id %>">
-							<td class="flight-location"><a href="/flight/<%= flight.id %>"><%= flight.location %></a></td>
-							<td class="flight-time"><a href="/flight/<%= flight.id %>"><%= flight.time %></a></td>
-						</a>
-						<td class="flight-members"><a href="/flight/<%= flight.id %>"><%= flight.members.length %></a></td>
-						</a>
-						</tr>
-					<% }); %>
-					</tbody>
-				</table>
-
-            <h2 class="content-subhead">Local Flights</h2>
+<h2 class="content-subhead">Friends Flights</h2>
+<% if(fFlights.length !== 0) { %>
+	<table class="fFlights pure-table">
+		<thead>
+			<tr>
+				<th>Location</th>
+				<th>Time</th>
+				<th>Members in Flock</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% fFlights.forEach(function(flight) { %>
+				<tr class="flight flight-<%= flight.id %>">
+					<td class="flight-location"><a href="/flight/<%= flight.id %>"><%= flight.location %></a></td>
+					<td class="flight-time"><a href="/flight/<%= flight.id %>"><%= flight.time %></a></td>
+				</a>
+				<td class="flight-members"><a href="/flight/<%= flight.id %>"><%= flight.members.length %></a></td>
+			</a>
+		<% }); %>
+	</tbody>
+</table>
+			<% } else { %>
+				<p><i class="fa fa-frown-o"></i>None of your friends have created a flight.</p>
+			<% } %>
+			<h2 class="content-subhead">Local Flights</h2>
+			<% if(lFlights.length !== 0) { %>
 				<table class="lFlights pure-table">
 					<thead>
 						<tr>
@@ -80,24 +82,28 @@
 						</tr>
 					</thead>
 					<tbody>
-					<% fFlights.forEach(function(flight) { %>
-						<tr class="flight flight-<%= flight.id %>">
-							<td class="flight-location"><%= flight.location %></td>
-							<td class="flight-time"><%= flight.time %></td>
-							<td class="flight-members"><%= flight.members.length %></td>
-						</tr>
-					<% }); %>
+						<% lFlights.forEach(function(flight) { %>
+							<tr class="flight flight-<%= flight.id %>">
+					<td class="flight-location"><a href="/flight/<%= flight.id %>"><%= flight.location %></a></td>
+					<td class="flight-time"><a href="/flight/<%= flight.id %>"><%= flight.time %></a></td>
+				</a>
+				<td class="flight-members"><a href="/flight/<%= flight.id %>"><%= flight.members.length %></a></td>
+							</tr>
+						<% }); %>
 					</tbody>
 				</table>
+			<% } else { %>
+				<p><i class="fa fa-frown-o"></i>There are no public local flights in your area.</p>
+			<% } %>
 
-            <h2 class="content-subhead">Let's Grab</h2>
-				<ul class="new-flights">
-					<li><a class="soar button-success pure-button" href="/newflight/Drinks"><i class="fa fa-glass pull-left"></i>Drinks</a></li>
-					<li><a class="soar button-success pure-button" href="/newflight/Food"><i class="fa fa-cutlery pull-left"></i>Food</a></li>
-					<li><a class="soar button-success pure-button" href="/newflight/Anything"><i class="fa fa-user pull-left"></i>Anything</a></li>
-				</ul>
-        </div>
-    </div>
+			<h2 class="content-subhead">Let's Grab</h2>
+			<ul class="new-flights">
+				<li><a class="soar button-success pure-button" href="/newflight/Drinks"><i class="fa fa-glass pull-left"></i>Drinks</a></li>
+				<li><a class="soar button-success pure-button" href="/newflight/Food"><i class="fa fa-cutlery pull-left"></i>Food</a></li>
+				<li><a class="soar button-success pure-button" href="/newflight/Anything"><i class="fa fa-user pull-left"></i>Anything</a></li>
+			</ul>
+		</div>
+	</div>
 </div>
 
 

@@ -17,6 +17,7 @@
     "ejs": "~0.8.5",
     "passport": "*",
     "passport-facebook": "*",
-    "superagent": "^0.17.0"
+    "superagent": "^0.17.0",
+    "fb": "~0.7.0"
   }
 }
