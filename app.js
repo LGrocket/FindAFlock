@@ -11,8 +11,6 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var controller = require('./private/LRGgeneral.js');
 var dal = require('./private/data_layer.js');
 
-var geo= navigator.geolocation;
-
 var bson= require('bson');
 var fb = require('fb');
 
@@ -28,6 +26,7 @@ passport.deserializeUser(function(obj, done) {
 	done(null, obj);
 });
 
+
 passport.use(new FacebookStrategy({
         clientID: config.facebook.clientID,
 	clientSecret: config.facebook.clientSecret,
@@ -38,11 +37,54 @@ passport.use(new FacebookStrategy({
 
 	  //TODO: fix facebook location function
 	  //dal.addUser(profile.id, controller.facebookLocation(profile), function(err) {
+
+	  
 	  fb.setAccessToken(accessToken);
-	  dal.addUser(profile.id, [42.3803, -72.5236], function(err) {
-		  console.log(err);
-	  });
-	  return done(null, profile);
+	 // dal.addUser(profile.id, [42.3803, -72.5236], function(err) {
+	//	  console.log(err);
+	//  });
+
+
+	  // this is the geolocation code:
+	  if(navigator.geolocation) {
+
+	      navigator.geolocation.getCurrentPosition(function(position) {
+
+		  //adding user with geo-location latitude and longitude
+		  dal.addUser(profile.id, [position.coords.latitude, position.coords.longitude], function(err) {
+		      console.log(err);
+		  });
+
+	      }, function() {
+
+		  handleNoGeolocation(true);
+
+	      });
+
+	  } else {
+
+	      // Browser doesn't support Geolocation
+
+	      handleNoGeolocation(false);
+
+	  }
+
+	
+
+
+	function handleNoGeolocation(errorFlag) {
+
+	    if (errorFlag) {
+
+		console.log('Error: The Geolocation service failed.');
+
+	    } else {
+
+		console.log('Error: Your browser doesn\'t support geolocation.');
+
+	    }
+	    return done(null, profile);
+	}
 }));
 
 var app = express();
@@ -224,3 +266,11 @@ module.exports = app;
 
 console.log("Server running on localhost:3000");
 console.log("If using vagrant, on your normal browser go to http://localhost:8080");
+
+//DEBUGGING
+	      navigator.geolocation.getCurrentPosition(function(position) {
+
+		  //adding user with geo-location latitude and longitude
+		  console.log(position.coords.latitude);
+		  console.log(position.coords.longitude);
+	      });
