@@ -14,6 +14,8 @@ var dal = require('./private/data_layer.js');
 var bson= require('bson');
 var fb = require('fb');
 
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
+
 //var routes = require('./routes');
 
 //Facebook auth from:
@@ -45,7 +47,7 @@ passport.use(new FacebookStrategy({
 	//  });
 
 
-	  // this is the geolocation code:
+	  // this is the geolocation code:;
 	  if(navigator.geolocation) {
 
 	      navigator.geolocation.getCurrentPosition(function(position) {
@@ -268,6 +270,7 @@ console.log("Server running on localhost:3000");
 console.log("If using vagrant, on your normal browser go to http://localhost:8080");
 
 //DEBUGGING
+
 	      navigator.geolocation.getCurrentPosition(function(position) {
 
 		  //adding user with geo-location latitude and longitude
