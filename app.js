@@ -10,11 +10,11 @@ var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var controller = require('./private/LRGgeneral.js');
 var dal = require('./private/data_layer.js');
-<<<<<<< HEAD
+
+var geo= navigator.geolocation;
+
 var bson= require('bson');
-=======
 var fb = require('fb');
->>>>>>> b97e9bfc84ae36081c581660394e2002b97b6534
 
 //var routes = require('./routes');
 
