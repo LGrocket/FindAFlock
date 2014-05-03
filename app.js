@@ -10,6 +10,7 @@ var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var controller = require('./private/LRGgeneral.js');
 var dal = require('./private/data_layer.js');
+var bson= require('bson');
 
 //var routes = require('./routes');
 
@@ -24,7 +25,7 @@ passport.deserializeUser(function(obj, done) {
 });
 
 passport.use(new FacebookStrategy({
-	clientID: config.facebook.clientID,
+        clientID: config.facebook.clientID,
 	clientSecret: config.facebook.clientSecret,
 	callbackURL: config.facebook.callbackURL,
 	profileFields: ['id', 'name', 'photos', 'location', 'friends']
