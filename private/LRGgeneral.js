@@ -17,15 +17,20 @@ exports.activityIcon = function(activityType) {
 //Extract a latlong from Facebook (used if geolocation is not possible)
 // Primary reference: http://nodejs.org/api/https.html#https_https_get_options_callback
 exports.facebookLocation = function(user, cb) {
-	request.get('https://graph.facebook.com/' + user._json.location.id, function(res) {
-		res.on('data', function(d) {
-			if (typeof cb === 'function')
-				cb(null,[ JSON.parse(d).location.latitude, JSON.parse(d).location.longitude]);
-		});
+	if (user._json.location){
+		request.get('https://graph.facebook.com/' + user._json.location.id, function(res) {
+			res.on('data', function(d) {
+				if (typeof cb === 'function')
+					cb(null,[ JSON.parse(d).location.latitude, JSON.parse(d).location.longitude]);
+			});
 
-	}).on('error', function(e) {
-		console.error(e);
-	});
+		}).on('error', function(e) {
+			console.error(e);
+		});
+	} else {
+		// If they have no facebook location, set at some point
+		cb(null, [10, 10]);
+	}
 };
 
 exports.deserializeFlight = function(flightID, cb) {
@@ -55,6 +60,10 @@ exports.deserializeFlight = function(flightID, cb) {
 		});
 	});
 };
+
+//
+//	Mock data below
+//
 
 //Get location stub
 exports.getLocation = function() {
