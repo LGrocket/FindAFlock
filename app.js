@@ -60,24 +60,14 @@ passport.use(new FacebookStrategy({
 			});
 
 		} else {
-
-
 			// Guess location using facebook
+			console.dir(profile.id);
 			controller.facebookLocation(profile, function(err, location) {
 				dal.addUser(profile.id, location, function(err) {
-					console.log("Adding user " + profile.id + " at location " + location);
 					if (err)
 						console.log(err);
 				});
 			});
-
-
-			//TODO: Legacy code - Mock representation
-			/*
-			dal.addUser(profile.id, [42.3803, -72.5236], function(err) {
-				console.log(err);
-			}); */
-
 
 			// Browser doesn't support Geolocation
 
@@ -148,14 +138,12 @@ app.get('/dashboard', ensureAuthenticated, function(req, res) {
 		res.friends.data.forEach(function(friend) {
 			friendIDs.push(friend.id);
 		});
-		//TODO: Replace mock data call with real data
-		//dal.getFriendsFlights(friendIDs, function(error, result){
-		dal.getFriendsFlights(['717096257'], function(error, result) {
+		dal.getFriendsFlights(friendIDs, function(error, result) {
 			if (!error) {
 				console.log("Friend Flights!");
 				console.dir(result);
 				result.forEach(function(lFlightID) {
-					controller.deserializeFlight(flightID, function(res) {
+					controller.deserializeFlight(lFlightID, function(res) {
 						fFlights.push(res);
 					});
 				});
@@ -191,10 +179,12 @@ app.get('/dashboard', ensureAuthenticated, function(req, res) {
 		}
 	});
 	//});
+
+	console.log(fFlights);
 	res.render('dashboard', {
 		title: "Dashboard",
-		fFlights: controller.fakeFlights2(),
-		lFlights: controller.fakeFlights(),
+		fFlights: fFlights,//controller.fakeFlights2(),
+		lFlights: lFlights,//controller.fakeFlights(),
 		user: req.user,
 		userFlight: userFlight
 	});
@@ -241,15 +231,18 @@ app.get('/newflight/:type', ensureAuthenticated, function(req, res) {
 	});
 });
 app.post('/addFlight', ensureAuthenticated, function(req, res) {
-	//dal.createFlight(function(err, id) {
-	//console.log("Error in addflight");
-	//console.log(id);
-	//console.log(req.user.id);
-	//dal.addUserToFlight(id, req.user.id);
-	//dal.setFlightActivityType(id, req.body.type);
-	//dal.setFlightTime(id, req.body.time);
-	//dal.setFlightLocation(id, req.body.location);
-	//});
+	dal.createFlight(function(err, id) {
+		if (err) {
+			console.log("Error in addflight");
+		} else {
+			console.log(id);
+			console.log(req.user.id);
+			dal.addUserToFlight(id, req.user.id);
+			dal.setFlightActivityType(id, req.body.type);
+			dal.setFlightTime(id, req.body.time);
+			dal.setFlightLocation(id, req.body.location);
+		}
+	});
 	res.redirect('/dashboard');
 });
 app.get('/account', ensureAuthenticated, function(req, res) {
