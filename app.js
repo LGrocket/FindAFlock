@@ -63,10 +63,14 @@ passport.use(new FacebookStrategy({
 
 
 			// Guess location using facebook
-			dal.addUser(profile.id, controller.facebookLocation(profile), function(err) {
-				console.log("Adding user " + profile.id + " at location " + controller.facebookLocation(profile));
-				console.log(err);
+			controller.facebookLocation(profile, function(err, location) {
+				dal.addUser(profile.id, location, function(err) {
+					console.log("Adding user " + profile.id + " at location " + location);
+					if (err)
+						console.log(err);
+				});
 			});
+
 
 			//TODO: Legacy code - Mock representation
 			/*
