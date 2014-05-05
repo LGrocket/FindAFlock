@@ -1,4 +1,5 @@
 var dal = require('./data_layer.js');
+var request = require('https');
 
 //Returns the class of the Font Awesome icon associated with the
 //passed activityType in plaintext
@@ -15,7 +16,8 @@ exports.activityIcon = function(activityType) {
 
 exports.facebookLocation = function(user) {
 	request.get('https://graph.facebook.com/'+user._json.location.id).end(function(res) {
-		return [JSON.parse(res.text).location.latitude, JSON.parse(res.text).location.longitude]; });
+		return [JSON.parse(res.text).location.latitude, JSON.parse(res.text).location.longitude]; 
+	});
 };
 
 exports.deserializeFlight = function (flightID, cb) {
