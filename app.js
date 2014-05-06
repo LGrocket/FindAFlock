@@ -218,7 +218,7 @@ app.get('/flight/:id', ensureAuthenticated, function(req, res) {
 			title: "Flight Info",
 			user: req.user,
 			flight: flight,
-			userIsMember: $.inArray(req.user, flight)
+			userIsMember: (flight.members.indexOf(req.user) !== -1)
 		});
 	});
 });
