@@ -15,7 +15,7 @@ var async = require('async');
 var bson = require('bson');
 var fb = require('fb');
 
-//<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
+//this might be needed for navigator.geolocation: <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
 
 //var routes = require('./routes');
 
