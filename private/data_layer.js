@@ -133,7 +133,7 @@ exports.getUserCurrentFlight = function(userID, cb) {
 //    *****************
 //    *    Flights    *
 //    *****************
-// Flight: [{flightID(_id), activity_type, date_of_creation, time, location, flock:[user1, user2…]}]
+// Flight: [{flightID(_id), activity_type, activity, date_of_creation, time, location, flock:[user1, user2…]}]
 
 exports.createFlight = function(cb) {
     db.flights.insert({
@@ -153,8 +153,14 @@ exports.createFlight = function(cb) {
     return this;
 }
 exports.addUserToFlight = function(flightID, userID, cb) {
-    this.removeUserFromFlight(userID, flightID, null);
-    this.setFlight(userID, flightID, null);
+    var dal = this;
+    this.getUserCurrentFlight(userID, function(err, currentFlight) {
+        if (err) cb(err);
+        dal.removeUserFromFlight(userID, currentFlight, function(err, docs) {
+            dal.setFlight(userID, flightID);
+        });
+    });
+
     db.flights.update({
         "_id": flightID
     }, {
@@ -175,7 +181,7 @@ exports.addUserToFlight = function(flightID, userID, cb) {
     return this;
 };
 exports.removeUserFromFlight = function(userID, flightID, cb) {
-    this.setFlight(userID, null, null);
+    this.setFlight(userID, null);
     db.flights.update({
         "_id": flightID
     }, {
@@ -189,7 +195,7 @@ exports.removeUserFromFlight = function(userID, flightID, cb) {
             } else if (!result) {
                 cb("Connection Error");
             } else {
-                cb(null, result.activity_type);
+                cb(null, true);
             }
         }
     });
@@ -209,7 +215,7 @@ exports.setFlightActivityType = function(flightID, activity_type, cb) {
             } else if (!result) {
                 cb("Connection Error");
             } else {
-                cb(null, result.activity_type);
+                cb(null, true);
             }
         }
     });
@@ -292,7 +298,7 @@ exports.getLocalFlights = function(location, distance, cb) {
             if (err) {
                 cb(err);
             } else if (!result) {
-                cb("Connection error");
+                cb("Connection error - no results found");
             } else {
                 var array = [];
                 for (var i = 0; i < result.length; i++)
@@ -312,7 +318,7 @@ exports.getFlightMembers = function(flightID, cb) {
                 if (err) {
                     cb(err);
                 } else if (!result) {
-                    cb("Connection Error");
+                    cb("Connection Error - no results found");
                 } else {
                     cb(null, result.flock);
                 }
@@ -330,7 +336,7 @@ exports.getFlightActivity = function(flightID, cb) {
                 if (err) {
                     cb(err);
                 } else if (!result) {
-                    cb("Connection Error");
+                    cb("Connection Error - no results found");
                 } else {
                     cb(null, result.activity);
                 }
@@ -347,7 +353,7 @@ exports.getFlightActivityType = function(flightID, cb) {
                 if (err) {
                     cb(err);
                 } else if (!result) {
-                    cb("Connection Error");
+                    cb("Connection Error - no results found");
                 } else {
                     cb(null, result.activity_type);
                 }
@@ -365,7 +371,7 @@ exports.getFlightDoC = function(flightID, cb) {
                 if (err) {
                     cb(err);
                 } else if (!result) {
-                    cb("Connection Error");
+                    cb("Connection Error - no results found");
                 } else {
                     cb(null, result.date_of_creation);
                 }
@@ -383,7 +389,7 @@ exports.getFlightTime = function(flightID, cb) {
                 if (err) {
                     cb(err);
                 } else if (!result) {
-                    cb("Connection Error");
+                    cb("Connection Error - no results found");
                 } else {
                     cb(null, result.time);
                 }
@@ -401,7 +407,7 @@ exports.getFlightLocation = function(flightID, cb) {
                 if (err) {
                     cb(err);
                 } else if (!result) {
-                    cb("Connection Error");
+                    cb("Connection Error - no results found");
                 } else {
                     cb(null, result.location);
                 }

@@ -48,4 +48,21 @@
 
 <script> $(function() { $('li.fb-profile img').tipsy(); });</script>
 <script src="/javascripts/ui.js"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+<script type="text/javascript">
+    $(function() {
+        var pyrmont = new google.maps.LatLng(42,-72);
+        map = new google.maps.Map(document.getElementById('map'), {
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center: pyrmont,
+            zoom: 13
+        });
+
+        var input = document.getElementById('searchTextField');
+        var options = {
+            types: ['establishment']
+        };
+        autocomplete = new google.maps.places.Autocomplete(input, options);
+    });
+</script>
 <% include footer %>

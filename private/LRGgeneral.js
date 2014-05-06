@@ -30,27 +30,30 @@ exports.facebookLocation = function(user, cb) {
 	} else {
 		// If they have no facebook location, set at some point
 		cb(null, [10, 10]);
-	}
+	};
 };
 
 exports.deserializeFlight = function(flightID, cb) {
-	var thisFlightID = flightID;
+	if (!flightID){
+		return cb(null, null);
+	}
+	var thisFlightID = require("mongojs")({}).ObjectId(flightID);;
 	var aT, t, l, m, d;
 	dal.getFlightActivityType(thisFlightID, function(error, result) {
 		aT = result;
 		dal.getFlightTime(thisFlightID, function(error, result) {
 			t = result;
-			dal.getFlightLocation(thisFlightID, function(error, result) {
+			dal.getFlightActivity(thisFlightID, function(error, result) {
 				l = result;
 				dal.getFlightMembers(thisFlightID, function(error, result) {
 					m = result;
 					dal.getFlightDoC(thisFlightID, function(error, result) {
 						d = result;
-						return cb({
+						return cb(null,{
 							id: thisFlightID,
 							activityType: aT,
 							time: t,
-							location: l,
+							location: l, //old value: location
 							members: m,
 							dateOfCreation: d
 						});
